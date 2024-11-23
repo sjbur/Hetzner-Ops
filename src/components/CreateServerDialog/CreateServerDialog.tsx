@@ -16,6 +16,7 @@ import {
 } from '@mui/material'
 import { useState, useEffect, useMemo } from 'react'
 import { hetznerService } from '@/services/hetznerService'
+import { useNotifications } from '@/hooks/useNotifications'
 
 interface CreateServerDialogProps {
   open: boolean
@@ -79,6 +80,8 @@ export function CreateServerDialog({
 
   const [nameError, setNameError] = useState<string>('')
 
+  const { showSuccess, showError } = useNotifications()
+
   useEffect(() => {
     if (open) {
       setLoadingData(true)
@@ -108,6 +111,7 @@ export function CreateServerDialog({
     setLoading(true)
     try {
       await hetznerService.createServer(serverData)
+      showSuccess('Server created successfully')
       onSuccess()
       onClose()
       setServerData({
@@ -119,6 +123,7 @@ export function CreateServerDialog({
       })
     } catch (error) {
       console.error('Failed to create server:', error)
+      showError('Failed to create server')
     } finally {
       setLoading(false)
     }

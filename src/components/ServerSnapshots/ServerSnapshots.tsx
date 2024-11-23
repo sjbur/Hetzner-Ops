@@ -29,6 +29,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { Snapshot } from '@/types/hetzner'
 import { SnapshotsSkeleton } from '@/components/SnapshotsSkeleton/SnapshotsSkeleton'
+import { useNotifications } from '@/hooks/useNotifications'
 
 interface ServerSnapshotsProps {
   serverId: number
@@ -48,6 +49,7 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [sort, setSort] = useState<SortValue>('created:desc')
+  const { showSuccess, showError, showWarning } = useNotifications()
 
   const fetchSnapshots = useCallback(async () => {
     try {
@@ -86,25 +88,30 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
   }, [fetchSnapshots])
 
   const handleCreateSnapshot = async () => {
+    showWarning('Creating snapshot... This may take a few minutes')
     try {
       await hetznerService.createSnapshot(serverId, {
         description,
       })
+      showSuccess('Snapshot created successfully')
       await fetchSnapshots()
       setCreateDialogOpen(false)
       setDescription('')
     } catch (error) {
       console.error('Failed to create snapshot:', error)
+      showError('Failed to create snapshot')
     }
   }
 
   const handleDeleteSnapshot = async (snapshotId: number) => {
     try {
       await hetznerService.deleteSnapshot(snapshotId)
+      showSuccess('Snapshot deleted successfully')
       await fetchSnapshots()
       setDeleteConfirmOpen(null)
     } catch (error) {
       console.error('Failed to delete snapshot:', error)
+      showError('Failed to delete snapshot')
     }
   }
 

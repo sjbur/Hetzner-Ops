@@ -19,6 +19,7 @@ import { useState } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { Server } from '@/types/hetzner'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNotifications } from '@/hooks/useNotifications'
 
 interface ServerActionsProps {
   server: Server
@@ -32,14 +33,20 @@ export function ServerActions({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [loading, setLoading] = useState(false)
+  const { showSuccess, showError } = useNotifications()
 
-  const handleAction = async (action: () => Promise<void>) => {
+  const handleAction = async (
+    action: () => Promise<void>,
+    actionName: string,
+  ) => {
     setLoading(true)
     try {
       await action()
+      showSuccess(`Server ${actionName} successful`)
       onActionComplete()
     } catch (error) {
       console.error('Action failed:', error)
+      showError(`Failed to ${actionName.toLowerCase()} server`)
     } finally {
       setLoading(false)
       setAnchorEl(null)
@@ -66,7 +73,7 @@ export function ServerActions({
         >
           <MenuItem
             onClick={() =>
-              handleAction(() => hetznerService.startServer(server.id))
+              handleAction(() => hetznerService.startServer(server.id), 'start')
             }
             disabled={server.status === 'running'}
           >
@@ -75,7 +82,7 @@ export function ServerActions({
 
           <MenuItem
             onClick={() =>
-              handleAction(() => hetznerService.stopServer(server.id))
+              handleAction(() => hetznerService.stopServer(server.id), 'stop')
             }
             disabled={server.status === 'stopped'}
           >
@@ -84,7 +91,10 @@ export function ServerActions({
 
           <MenuItem
             onClick={() =>
-              handleAction(() => hetznerService.rebootServer(server.id))
+              handleAction(
+                () => hetznerService.rebootServer(server.id),
+                'reboot',
+              )
             }
           >
             <Refresh sx={{ mr: 1 }} /> Reboot

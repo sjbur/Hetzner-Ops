@@ -27,6 +27,7 @@ import {
 import { useState, useEffect } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { SSHKey } from '@/types/hetzner'
+import { useNotifications } from '@/hooks/useNotifications'
 
 export function SSHKeys() {
   const [keys, setKeys] = useState<SSHKey[]>([])
@@ -42,6 +43,7 @@ export function SSHKeys() {
     public_key: '',
   })
   const [formError, setFormError] = useState('')
+  const { showSuccess, showError } = useNotifications()
 
   const fetchKeys = async () => {
     try {
@@ -60,7 +62,7 @@ export function SSHKeys() {
 
   useEffect(() => {
     fetchKeys()
-  }, [page, rowsPerPage])
+  }, [fetchKeys, page, rowsPerPage])
 
   const handleCreate = async () => {
     if (!formData.name || !formData.public_key) {
@@ -70,12 +72,14 @@ export function SSHKeys() {
 
     try {
       await hetznerService.createSSHKey(formData)
+      showSuccess('SSH key added successfully')
       await fetchKeys()
       setCreateDialogOpen(false)
       setFormData({ name: '', public_key: '' })
       setFormError('')
     } catch (error) {
       console.error('Failed to create SSH key:', error)
+      showError('Failed to add SSH key')
       setFormError('Failed to create SSH key')
     }
   }
@@ -83,10 +87,12 @@ export function SSHKeys() {
   const handleDelete = async (id: number) => {
     try {
       await hetznerService.deleteSSHKey(id)
+      showSuccess('SSH key deleted successfully')
       await fetchKeys()
       setDeleteConfirmOpen(null)
     } catch (error) {
       console.error('Failed to delete SSH key:', error)
+      showError('Failed to delete SSH key')
     }
   }
 
