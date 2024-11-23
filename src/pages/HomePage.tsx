@@ -8,9 +8,43 @@ import {
   CircularProgress,
 } from '@mui/material'
 import { useServers } from '@hooks/useServers'
+import { ServerActions } from '@/components/ServerActions/ServerActions'
+import { ServerFilters } from '@/components/ServerFilters/ServerFilters'
+import { useStore } from '@/store/useStore'
 
 export function HomePage() {
-  const { servers, isLoading, error } = useServers()
+  const { servers, isLoading, error, refresh } = useServers()
+  const { filters } = useStore()
+
+  // Apply filters and sorting
+  const filteredServers = servers
+    .filter((server) => {
+      if (filters.status && server.status !== filters.status) return false
+      if (
+        filters.search &&
+        !server.name.toLowerCase().includes(filters.search.toLowerCase())
+      )
+        return false
+      return true
+    })
+    .sort((a, b) => {
+      if (!filters.sortBy) return 0
+      const order = filters.sortOrder === 'asc' ? 1 : -1
+
+      switch (filters.sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name) * order
+        case 'created':
+          return (
+            (new Date(a.created).getTime() - new Date(b.created).getTime()) *
+            order
+          )
+        case 'status':
+          return a.status.localeCompare(b.status) * order
+        default:
+          return 0
+      }
+    })
 
   if (error) return <Box p={3}>Failed to load servers: {error.message}</Box>
   if (isLoading)
@@ -26,14 +60,19 @@ export function HomePage() {
         Hetzner Servers
       </Typography>
 
+      <ServerFilters />
+
       <Grid container spacing={3}>
-        {servers.map((server) => (
+        {filteredServers.map((server) => (
           <Grid item xs={12} md={6} lg={4} key={server.id}>
             <Card>
               <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {server.name}
-                </Typography>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Typography variant="h6" gutterBottom>
+                    {server.name}
+                  </Typography>
+                  <ServerActions server={server} onActionComplete={refresh} />
+                </Box>
 
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                   <Chip
