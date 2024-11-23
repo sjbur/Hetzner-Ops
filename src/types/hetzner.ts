@@ -47,6 +47,33 @@ export interface Server {
   created: string
 }
 
+export interface ServerType {
+  id: number
+  name: string
+  description: string
+  cores: number
+  memory: number
+  disk: number
+  prices: Array<{
+    location: string
+    price_monthly: {
+      gross: string
+    }
+  }>
+}
+
+export interface Image {
+  id: number
+  name: string
+  type: string
+  description: string
+  os_flavor: string
+  os_version: string | null
+  rapid_deploy: boolean
+  status: string
+  created: string
+}
+
 export interface ServersResponse {
   servers: Server[]
   meta: {

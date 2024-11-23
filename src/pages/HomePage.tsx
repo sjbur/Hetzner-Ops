@@ -5,16 +5,21 @@ import {
   Grid,
   Typography,
   Chip,
-  CircularProgress,
+  Button,
 } from '@mui/material'
 import { useServers } from '@hooks/useServers'
 import { ServerActions } from '@/components/ServerActions/ServerActions'
 import { ServerFilters } from '@/components/ServerFilters/ServerFilters'
 import { useStore } from '@/store/useStore'
+import { Add as AddIcon } from '@mui/icons-material'
+import { CreateServerDialog } from '@/components/CreateServerDialog/CreateServerDialog'
+import { useState } from 'react'
+import { ServerSkeleton } from '@/components/ServerSkeleton/ServerSkeleton'
 
 export function HomePage() {
   const { servers, isLoading, error, refresh } = useServers()
   const { filters } = useStore()
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
 
   // Apply filters and sorting
   const filteredServers = servers
@@ -47,18 +52,35 @@ export function HomePage() {
     })
 
   if (error) return <Box p={3}>Failed to load servers: {error.message}</Box>
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Box p={3} display="flex" justifyContent="center">
-        <CircularProgress />
+      <Box sx={{ p: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+          <Typography variant="h4">Hetzner Servers</Typography>
+          <Button variant="contained" startIcon={<AddIcon />} disabled>
+            Create Server
+          </Button>
+        </Box>
+
+        <Grid container spacing={3}>
+          <ServerSkeleton />
+        </Grid>
       </Box>
     )
+  }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Hetzner Servers
-      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h4">Hetzner Servers</Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={() => setCreateDialogOpen(true)}
+        >
+          Create Server
+        </Button>
+      </Box>
 
       <ServerFilters />
 
@@ -105,6 +127,12 @@ export function HomePage() {
           </Grid>
         ))}
       </Grid>
+
+      <CreateServerDialog
+        open={createDialogOpen}
+        onClose={() => setCreateDialogOpen(false)}
+        onSuccess={refresh}
+      />
     </Box>
   )
 }
