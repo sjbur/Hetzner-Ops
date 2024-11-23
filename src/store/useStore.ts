@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-interface ServerFilters {
+export interface ServerFilters {
   status?: string
   search?: string
   sortBy?: 'name' | 'created' | 'status'
