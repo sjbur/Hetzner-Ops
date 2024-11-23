@@ -18,9 +18,31 @@ export const useTheme = () => useContext(ThemeContext)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mode, setMode] = useState<PaletteMode>(() => {
+    // Сначала проверяем сохраненные настройки
     const savedMode = localStorage.getItem('themeMode')
-    return (savedMode as PaletteMode) || 'light'
+    if (savedMode) {
+      return savedMode as PaletteMode
+    }
+
+    // Если нет сохраненных настроек, используем системные предпочтения
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light'
   })
+
+  useEffect(() => {
+    // Слушаем изменения системных настроек
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Обновляем тему только если пользователь не установил свои настройки
+      if (!localStorage.getItem('themeMode')) {
+        setMode(e.matches ? 'dark' : 'light')
+      }
+    }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
+  }, [])
 
   useEffect(() => {
     localStorage.setItem('themeMode', mode)
