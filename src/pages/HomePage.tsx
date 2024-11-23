@@ -15,6 +15,7 @@ import { Add as AddIcon } from '@mui/icons-material'
 import { CreateServerDialog } from '@/components/CreateServerDialog/CreateServerDialog'
 import { useState } from 'react'
 import { ServerSkeleton } from '@/components/ServerSkeleton/ServerSkeleton'
+import { Link } from '@tanstack/react-router'
 
 export function HomePage() {
   const { servers, isLoading, error, refresh } = useServers()
@@ -87,43 +88,75 @@ export function HomePage() {
       <Grid container spacing={3}>
         {filteredServers.map((server) => (
           <Grid item xs={12} md={6} lg={4} key={server.id}>
-            <Card>
-              <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <Typography variant="h6" gutterBottom>
-                    {server.name}
+            <Link
+              to="/servers/$serverId"
+              params={{ serverId: server.id.toString() }}
+              style={{ textDecoration: 'none' }}
+            >
+              <Card
+                sx={{
+                  cursor: 'pointer',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: (theme) => theme.shadows[4],
+                  },
+                }}
+              >
+                <CardContent>
+                  <Box
+                    sx={{ display: 'flex', justifyContent: 'space-between' }}
+                  >
+                    <Typography variant="h6" gutterBottom>
+                      {server.name}
+                    </Typography>
+                    <Box onClick={(e) => e.preventDefault()}>
+                      <ServerActions
+                        server={server}
+                        onActionComplete={refresh}
+                      />
+                    </Box>
+                  </Box>
+
+                  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                    <Chip
+                      label={server.status}
+                      color={
+                        server.status === 'running' ? 'success' : 'default'
+                      }
+                      size="small"
+                    />
+                    <Chip
+                      label={`ID: ${server.id}`}
+                      variant="outlined"
+                      size="small"
+                    />
+                  </Box>
+
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    IP: {server.public_net.ipv4.ip}
                   </Typography>
-                  <ServerActions server={server} onActionComplete={refresh} />
-                </Box>
 
-                <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                  <Chip
-                    label={server.status}
-                    color={server.status === 'running' ? 'success' : 'default'}
-                    size="small"
-                  />
-                  <Chip
-                    label={`ID: ${server.id}`}
-                    variant="outlined"
-                    size="small"
-                  />
-                </Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    Type: {server.server_type.name}
+                  </Typography>
 
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  IP: {server.public_net.ipv4.ip}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  Type: {server.server_type.name}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  Resources: {server.server_type.cores} CPU,{' '}
-                  {server.server_type.memory}GB RAM, {server.server_type.disk}GB
-                  Disk
-                </Typography>
-              </CardContent>
-            </Card>
+                  <Typography variant="body2" color="text.secondary">
+                    Resources: {server.server_type.cores} CPU,{' '}
+                    {server.server_type.memory}GB RAM, {server.server_type.disk}
+                    GB Disk
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
           </Grid>
         ))}
       </Grid>
