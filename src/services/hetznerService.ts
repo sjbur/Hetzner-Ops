@@ -159,4 +159,9 @@ export const hetznerService = {
   ): Promise<void> => {
     await client.put(`/servers/${serverId}/firewall/rules`, { rules })
   },
+
+  // Rename server
+  renameServer: async (id: number, name: string): Promise<void> => {
+    await client.put<ServerActionResponse>(`/servers/${id}`, { name })
+  },
 }

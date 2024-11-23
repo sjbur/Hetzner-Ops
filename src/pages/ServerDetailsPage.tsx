@@ -8,8 +8,9 @@ import {
   Button,
   Tab,
   Tabs,
+  IconButton,
 } from '@mui/material'
-import { ArrowBack } from '@mui/icons-material'
+import { ArrowBack, Edit as EditIcon } from '@mui/icons-material'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { ServerMetrics } from '@/components/ServerMetrics/ServerMetrics'
@@ -18,6 +19,7 @@ import { ServerActions } from '@/components/ServerActions/ServerActions'
 import { ServerDetailsSkeleton } from '@/components/ServerDetailsSkeleton/ServerDetailsSkeleton'
 import { useApi } from '@/hooks/useApi'
 import type { Server } from '@/types/hetzner'
+import { RenameServerDialog } from '@/components/RenameServerDialog/RenameServerDialog'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -52,6 +54,7 @@ export function ServerDetailsPage() {
     error,
     mutate: refresh,
   } = useApi<{ server: Server }>(`/servers/${serverId}`)
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false)
 
   useEffect(() => {
     document.title = server ? `Server: ${server.server.name}` : 'Loading...'
@@ -88,9 +91,17 @@ export function ServerDetailsPage() {
               }}
             >
               <Box>
-                <Typography variant="h4" gutterBottom>
-                  {serverData.name}
-                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography variant="h4" gutterBottom>
+                    {serverData.name}
+                  </Typography>
+                  <IconButton
+                    onClick={() => setRenameDialogOpen(true)}
+                    size="small"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Box>
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                   <Chip
                     label={serverData.status}
@@ -164,6 +175,14 @@ export function ServerDetailsPage() {
           serverName={serverData.name}
         />
       </TabPanel>
+
+      <RenameServerDialog
+        open={renameDialogOpen}
+        onClose={() => setRenameDialogOpen(false)}
+        onSuccess={refresh}
+        currentName={serverData.name}
+        serverId={serverData.id}
+      />
     </Box>
   )
 }
