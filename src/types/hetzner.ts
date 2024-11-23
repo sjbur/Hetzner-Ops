@@ -154,3 +154,23 @@ export interface SnapshotsResponse {
     }
   }
 }
+
+export interface SSHKey {
+  id: number
+  name: string
+  fingerprint: string
+  public_key: string
+  labels?: Record<string, string>
+  created: string
+}
+
+export interface SSHKeysResponse {
+  ssh_keys: SSHKey[]
+  meta: {
+    pagination: {
+      page: number
+      per_page: number
+      total_entries: number
+    }
+  }
+}

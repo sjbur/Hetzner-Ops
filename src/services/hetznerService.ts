@@ -5,6 +5,8 @@ import type {
   Image,
   ServerMetrics,
   FirewallRule,
+  SSHKey,
+  SSHKeysResponse,
 } from '@/types/hetzner'
 
 interface ServerActionResponse {
@@ -163,5 +165,28 @@ export const hetznerService = {
   // Rename server
   renameServer: async (id: number, name: string): Promise<void> => {
     await client.put<ServerActionResponse>(`/servers/${id}`, { name })
+  },
+
+  // SSH Keys
+  getSSHKeys: async (params?: {
+    sort?: 'id' | 'id:asc' | 'id:desc' | 'name' | 'name:asc' | 'name:desc'
+    page?: number
+    per_page?: number
+  }) => {
+    const response = await client.get<SSHKeysResponse>('/ssh_keys', { params })
+    return response.data
+  },
+
+  createSSHKey: async (data: {
+    name: string
+    public_key: string
+    labels?: Record<string, string>
+  }) => {
+    const response = await client.post<{ ssh_key: SSHKey }>('/ssh_keys', data)
+    return response.data
+  },
+
+  deleteSSHKey: async (id: number): Promise<void> => {
+    await client.delete(`/ssh_keys/${id}`)
   },
 }
