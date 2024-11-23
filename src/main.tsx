@@ -7,14 +7,15 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
+import { RouterProvider } from '@tanstack/react-router'
 import { theme } from './theme/theme'
-import App from './App'
+import { router } from './router'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <App />
+      <RouterProvider router={router} />
     </ThemeProvider>
   </StrictMode>,
 )
