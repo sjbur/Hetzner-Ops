@@ -4,7 +4,7 @@ export const client = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
+    Authorization: `Bearer ${import.meta.env.VITE_API_TOKEN}`,
   },
   timeout: 10000,
 })
@@ -12,7 +12,9 @@ export const client = axios.create({
 client.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', error)
+    const errorMessage =
+      error.response?.data?.error?.message || 'An error occurred'
+    console.error('Hetzner API Error:', errorMessage)
     return Promise.reject(error)
   },
 )

@@ -1,38 +1,30 @@
 import { createTheme } from '@mui/material/styles'
 
-declare module '@mui/material/styles' {
-  interface Theme {
-    status: {
-      danger: string
-    }
-  }
-  interface ThemeOptions {
-    status?: {
-      danger?: string
-    }
-  }
-}
-
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#556cd6',
+      main: '#D50C2D',
     },
     secondary: {
-      main: '#19857b',
-    },
-    error: {
-      main: '#ff1744',
+      main: '#2D3748',
     },
     background: {
-      default: '#fff',
+      default: '#F7FAFC',
     },
   },
   components: {
-    MuiButton: {
+    MuiCard: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
+          borderRadius: 8,
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
         },
       },
     },
