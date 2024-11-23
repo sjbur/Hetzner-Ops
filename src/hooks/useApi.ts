@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { client } from '../api/client'
+import { client } from '@api/client'
 
 const fetcher = (url: string) => client.get(url).then((res) => res.data)
 

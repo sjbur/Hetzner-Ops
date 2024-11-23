@@ -8,8 +8,8 @@ import { createRoot } from 'react-dom/client'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { RouterProvider } from '@tanstack/react-router'
-import { theme } from './theme/theme'
-import { router } from './router'
+import { theme } from '@theme/theme'
+import { router } from '@/router'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

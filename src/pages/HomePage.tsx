@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { useStore } from '../store/useStore'
-import { useApi } from '../hooks/useApi'
+import { useStore } from '@store/useStore'
+import { useApi } from '@hooks/useApi'
 
 interface Todo {
   id: number
