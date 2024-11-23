@@ -2,17 +2,22 @@ import { motion } from 'framer-motion'
 import { Box, BoxProps } from '@mui/material'
 import { forwardRef } from 'react'
 
-export const MotionContainer = forwardRef<HTMLDivElement, BoxProps>(
-  (props, ref) => (
-    <Box
-      component={motion.div}
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 0.2 }}
-      {...props}
-    />
+type MotionContainerProps = BoxProps & {
+  children: React.ReactNode
+}
+
+export const MotionContainer = forwardRef<HTMLDivElement, MotionContainerProps>(
+  ({ children, ...props }, ref) => (
+    <Box ref={ref} {...props}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {children}
+      </motion.div>
+    </Box>
   ),
 )
 

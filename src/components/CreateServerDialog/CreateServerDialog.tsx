@@ -12,10 +12,10 @@ import {
   Box,
   CircularProgress,
   Typography,
+  Fade,
 } from '@mui/material'
 import { useState, useEffect, useMemo } from 'react'
 import { hetznerService } from '@/services/hetznerService'
-import { motion } from 'framer-motion'
 
 interface CreateServerDialogProps {
   open: boolean
@@ -171,12 +171,9 @@ export function CreateServerDialog({
       onClose={onClose}
       maxWidth="sm"
       fullWidth
-      TransitionComponent={motion.div}
+      TransitionComponent={Fade}
       TransitionProps={{
-        initial: { opacity: 0, y: 20 },
-        animate: { opacity: 1, y: 0 },
-        exit: { opacity: 0, y: 20 },
-        transition: { duration: 0.2 },
+        timeout: 200,
       }}
     >
       <DialogTitle>Create New Server</DialogTitle>
