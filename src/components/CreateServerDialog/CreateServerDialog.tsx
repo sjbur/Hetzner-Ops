@@ -15,6 +15,7 @@ import {
 } from '@mui/material'
 import { useState, useEffect, useMemo } from 'react'
 import { hetznerService } from '@/services/hetznerService'
+import { motion } from 'framer-motion'
 
 interface CreateServerDialogProps {
   open: boolean
@@ -165,7 +166,19 @@ export function CreateServerDialog({
   }, [loading, loadingData, nameError, serverData])
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="sm"
+      fullWidth
+      TransitionComponent={motion.div}
+      TransitionProps={{
+        initial: { opacity: 0, y: 20 },
+        animate: { opacity: 1, y: 0 },
+        exit: { opacity: 0, y: 20 },
+        transition: { duration: 0.2 },
+      }}
+    >
       <DialogTitle>Create New Server</DialogTitle>
       <DialogContent>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>

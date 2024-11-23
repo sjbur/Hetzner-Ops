@@ -37,6 +37,8 @@
     "@storybook/react": "^8.4.5",
     "@tanstack/react-router": "^1.82.2",
     "axios": "^1.7.7",
+    "framer-motion": "^11.11.17",
+    "notistack": "^3.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "recharts": "^2.13.3",

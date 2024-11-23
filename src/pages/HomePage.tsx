@@ -1,12 +1,4 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Typography,
-  Chip,
-  Button,
-} from '@mui/material'
+import { Box, CardContent, Grid, Typography, Chip, Button } from '@mui/material'
 import { useServers } from '@hooks/useServers'
 import { ServerActions } from '@/components/ServerActions/ServerActions'
 import { ServerFilters } from '@/components/ServerFilters/ServerFilters'
@@ -16,6 +8,9 @@ import { CreateServerDialog } from '@/components/CreateServerDialog/CreateServer
 import { useState } from 'react'
 import { ServerSkeleton } from '@/components/ServerSkeleton/ServerSkeleton'
 import { Link } from '@tanstack/react-router'
+import { AnimatePresence, motion } from 'framer-motion'
+import { MotionCard } from '@/components/animations/MotionCard'
+import { FiltersSkeleton } from '@/components/FiltersSkeleton/FiltersSkeleton'
 
 export function HomePage() {
   const { servers, isLoading, error, refresh } = useServers()
@@ -63,6 +58,8 @@ export function HomePage() {
           </Button>
         </Box>
 
+        <FiltersSkeleton />
+
         <Grid container spacing={3}>
           <ServerSkeleton />
         </Grid>
@@ -86,79 +83,82 @@ export function HomePage() {
       <ServerFilters />
 
       <Grid container spacing={3}>
-        {filteredServers.map((server) => (
-          <Grid item xs={12} md={6} lg={4} key={server.id}>
-            <Link
-              to="/servers/$serverId"
-              params={{ serverId: server.id.toString() }}
-              style={{ textDecoration: 'none' }}
-            >
-              <Card
-                sx={{
-                  cursor: 'pointer',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: (theme) => theme.shadows[4],
-                  },
-                }}
+        <AnimatePresence>
+          {filteredServers.map((server, index) => (
+            <Grid item xs={12} md={6} lg={4} key={server.id}>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
               >
-                <CardContent>
-                  <Box
-                    sx={{ display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <Typography variant="h6" gutterBottom>
-                      {server.name}
-                    </Typography>
-                    <Box onClick={(e) => e.preventDefault()}>
-                      <ServerActions
-                        server={server}
-                        onActionComplete={refresh}
-                      />
-                    </Box>
-                  </Box>
+                <Link
+                  to="/servers/$serverId"
+                  params={{ serverId: server.id.toString() }}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <MotionCard>
+                    <CardContent>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Typography variant="h6" gutterBottom>
+                          {server.name}
+                        </Typography>
+                        <Box onClick={(e) => e.preventDefault()}>
+                          <ServerActions
+                            server={server}
+                            onActionComplete={refresh}
+                          />
+                        </Box>
+                      </Box>
 
-                  <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                    <Chip
-                      label={server.status}
-                      color={
-                        server.status === 'running' ? 'success' : 'default'
-                      }
-                      size="small"
-                    />
-                    <Chip
-                      label={`ID: ${server.id}`}
-                      variant="outlined"
-                      size="small"
-                    />
-                  </Box>
+                      <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                        <Chip
+                          label={server.status}
+                          color={
+                            server.status === 'running' ? 'success' : 'default'
+                          }
+                          size="small"
+                        />
+                        <Chip
+                          label={`ID: ${server.id}`}
+                          variant="outlined"
+                          size="small"
+                        />
+                      </Box>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    IP: {server.public_net.ipv4.ip}
-                  </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        IP: {server.public_net.ipv4.ip}
+                      </Typography>
 
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    Type: {server.server_type.name}
-                  </Typography>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        gutterBottom
+                      >
+                        Type: {server.server_type.name}
+                      </Typography>
 
-                  <Typography variant="body2" color="text.secondary">
-                    Resources: {server.server_type.cores} CPU,{' '}
-                    {server.server_type.memory}GB RAM, {server.server_type.disk}
-                    GB Disk
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
-          </Grid>
-        ))}
+                      <Typography variant="body2" color="text.secondary">
+                        Resources: {server.server_type.cores} CPU,{' '}
+                        {server.server_type.memory}GB RAM,{' '}
+                        {server.server_type.disk}
+                        GB Disk
+                      </Typography>
+                    </CardContent>
+                  </MotionCard>
+                </Link>
+              </motion.div>
+            </Grid>
+          ))}
+        </AnimatePresence>
       </Grid>
 
       <CreateServerDialog

@@ -20,6 +20,7 @@ import { ServerDetailsSkeleton } from '@/components/ServerDetailsSkeleton/Server
 import { useApi } from '@/hooks/useApi'
 import type { Server } from '@/types/hetzner'
 import { RenameServerDialog } from '@/components/RenameServerDialog/RenameServerDialog'
+import { motion } from 'framer-motion'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -72,7 +73,11 @@ export function ServerDetailsPage() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Box sx={{ mb: 3 }}>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
         <Button
           startIcon={<ArrowBack />}
           onClick={() => navigate({ to: '/' })}
@@ -153,28 +158,28 @@ export function ServerDetailsPage() {
             </Grid>
           </CardContent>
         </Card>
-      </Box>
 
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={tabValue}
-          onChange={(_, newValue) => setTabValue(newValue)}
-        >
-          <Tab label="Metrics" />
-          <Tab label="Snapshots" />
-        </Tabs>
-      </Box>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', mt: 3 }}>
+          <Tabs
+            value={tabValue}
+            onChange={(_, newValue) => setTabValue(newValue)}
+          >
+            <Tab label="Metrics" />
+            <Tab label="Snapshots" />
+          </Tabs>
+        </Box>
 
-      <TabPanel value={tabValue} index={0}>
-        <ServerMetrics serverId={serverData.id} />
-      </TabPanel>
+        <TabPanel value={tabValue} index={0}>
+          <ServerMetrics serverId={serverData.id} />
+        </TabPanel>
 
-      <TabPanel value={tabValue} index={1}>
-        <ServerSnapshots
-          serverId={serverData.id}
-          serverName={serverData.name}
-        />
-      </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          <ServerSnapshots
+            serverId={serverData.id}
+            serverName={serverData.name}
+          />
+        </TabPanel>
+      </motion.div>
 
       <RenameServerDialog
         open={renameDialogOpen}

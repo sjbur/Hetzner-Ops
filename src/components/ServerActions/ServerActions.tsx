@@ -18,6 +18,7 @@ import {
 import { useState } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { Server } from '@/types/hetzner'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface ServerActionsProps {
   server: Server
@@ -50,45 +51,50 @@ export function ServerActions({
       <IconButton
         onClick={(e) => setAnchorEl(e.currentTarget)}
         disabled={loading}
+        component={motion.button}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
       >
         <MoreVertIcon />
       </IconButton>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
-      >
-        <MenuItem
-          onClick={() =>
-            handleAction(() => hetznerService.startServer(server.id))
-          }
-          disabled={server.status === 'running'}
+      <AnimatePresence>
+        <Menu
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={() => setAnchorEl(null)}
         >
-          <PlayArrow sx={{ mr: 1 }} /> Start
-        </MenuItem>
+          <MenuItem
+            onClick={() =>
+              handleAction(() => hetznerService.startServer(server.id))
+            }
+            disabled={server.status === 'running'}
+          >
+            <PlayArrow sx={{ mr: 1 }} /> Start
+          </MenuItem>
 
-        <MenuItem
-          onClick={() =>
-            handleAction(() => hetznerService.stopServer(server.id))
-          }
-          disabled={server.status === 'stopped'}
-        >
-          <Stop sx={{ mr: 1 }} /> Stop
-        </MenuItem>
+          <MenuItem
+            onClick={() =>
+              handleAction(() => hetznerService.stopServer(server.id))
+            }
+            disabled={server.status === 'stopped'}
+          >
+            <Stop sx={{ mr: 1 }} /> Stop
+          </MenuItem>
 
-        <MenuItem
-          onClick={() =>
-            handleAction(() => hetznerService.rebootServer(server.id))
-          }
-        >
-          <Refresh sx={{ mr: 1 }} /> Reboot
-        </MenuItem>
+          <MenuItem
+            onClick={() =>
+              handleAction(() => hetznerService.rebootServer(server.id))
+            }
+          >
+            <Refresh sx={{ mr: 1 }} /> Reboot
+          </MenuItem>
 
-        <MenuItem onClick={() => setConfirmDelete(true)}>
-          <Delete sx={{ mr: 1 }} /> Delete
-        </MenuItem>
-      </Menu>
+          <MenuItem onClick={() => setConfirmDelete(true)}>
+            <Delete sx={{ mr: 1 }} /> Delete
+          </MenuItem>
+        </Menu>
+      </AnimatePresence>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>
         <DialogTitle>Confirm Delete</DialogTitle>

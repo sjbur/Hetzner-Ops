@@ -1,5 +1,6 @@
 import { AppBar, Toolbar, Button, Box } from '@mui/material'
 import { Link } from '@tanstack/react-router'
+import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle'
 
 export function Navigation() {
   return (
@@ -13,6 +14,7 @@ export function Navigation() {
             About
           </Button>
         </Box>
+        <ThemeToggle />
       </Toolbar>
     </AppBar>
   )
