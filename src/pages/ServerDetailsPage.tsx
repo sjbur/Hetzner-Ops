@@ -9,6 +9,7 @@ import {
   Tab,
   Tabs,
   IconButton,
+  Tooltip,
 } from '@mui/material'
 import { ArrowBack, Edit as EditIcon } from '@mui/icons-material'
 import { useNavigate, useParams } from '@tanstack/react-router'
@@ -21,6 +22,7 @@ import { useApi } from '@/hooks/useApi'
 import type { Server } from '@/types/hetzner'
 import { RenameServerDialog } from '@/components/RenameServerDialog/RenameServerDialog'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 interface TabPanelProps {
   children?: React.ReactNode
@@ -56,6 +58,7 @@ export function ServerDetailsPage() {
     mutate: refresh,
   } = useApi<{ server: Server }>(`/servers/${serverId}`)
   const [renameDialogOpen, setRenameDialogOpen] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     document.title = server ? `Server: ${server.server.name}` : 'Loading...'
@@ -64,12 +67,17 @@ export function ServerDetailsPage() {
     }
   }, [server])
 
-  if (error) return <Box p={3}>Failed to load server: {error.message}</Box>
+  if (error)
+    return (
+      <Box p={3}>
+        {t('common.error')}: {error.message}
+      </Box>
+    )
   if (isLoading) return <ServerDetailsSkeleton />
 
   const serverData = server?.server
 
-  if (!serverData) return <Box p={3}>Server not found</Box>
+  if (!serverData) return <Box p={3}>{t('servers.notFound')}</Box>
 
   return (
     <Box sx={{ p: 3 }}>
@@ -83,7 +91,7 @@ export function ServerDetailsPage() {
           onClick={() => navigate({ to: '/' })}
           sx={{ mb: 2 }}
         >
-          Back to Servers
+          {t('common.back')}
         </Button>
 
         <Card>
@@ -100,16 +108,18 @@ export function ServerDetailsPage() {
                   <Typography variant="h4" gutterBottom>
                     {serverData.name}
                   </Typography>
-                  <IconButton
-                    onClick={() => setRenameDialogOpen(true)}
-                    size="small"
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  <Tooltip title={t('serverDetails.renameServer')}>
+                    <IconButton
+                      onClick={() => setRenameDialogOpen(true)}
+                      size="small"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                   <Chip
-                    label={serverData.status}
+                    label={t(`filters.${serverData.status}`)}
                     color={
                       serverData.status === 'running' ? 'success' : 'default'
                     }
@@ -123,14 +133,14 @@ export function ServerDetailsPage() {
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary">
-                  IP Address
+                  {t('common.ipAddress')}
                 </Typography>
                 <Typography gutterBottom>
                   {serverData.public_net.ipv4.ip}
                 </Typography>
 
                 <Typography variant="subtitle2" color="text.secondary">
-                  Location
+                  {t('common.location')}
                 </Typography>
                 <Typography gutterBottom>
                   {serverData.datacenter.location.city},{' '}
@@ -140,19 +150,19 @@ export function ServerDetailsPage() {
 
               <Grid item xs={12} md={6}>
                 <Typography variant="subtitle2" color="text.secondary">
-                  Server Type
+                  {t('common.serverType')}
                 </Typography>
                 <Typography gutterBottom>
                   {serverData.server_type.name}
                 </Typography>
 
                 <Typography variant="subtitle2" color="text.secondary">
-                  Resources
+                  {t('common.resources')}
                 </Typography>
                 <Typography>
-                  {serverData.server_type.cores} CPU •{' '}
-                  {serverData.server_type.memory}
-                  GB RAM • {serverData.server_type.disk}GB Disk
+                  {serverData.server_type.cores} {t('common.cores')} •{' '}
+                  {serverData.server_type.memory}GB {t('common.memory')} •{' '}
+                  {serverData.server_type.disk}GB {t('common.disk')}
                 </Typography>
               </Grid>
             </Grid>
@@ -164,8 +174,8 @@ export function ServerDetailsPage() {
             value={tabValue}
             onChange={(_, newValue) => setTabValue(newValue)}
           >
-            <Tab label="Metrics" />
-            <Tab label="Snapshots" />
+            <Tab label={t('common.metrics')} />
+            <Tab label={t('servers.snapshots')} />
           </Tabs>
         </Box>
 

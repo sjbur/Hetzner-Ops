@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import { useState } from 'react'
 import { hetznerService } from '@/services/hetznerService'
+import { useTranslation } from 'react-i18next'
 
 interface RenameServerDialogProps {
   open: boolean
@@ -24,25 +25,26 @@ export function RenameServerDialog({
   currentName,
   serverId,
 }: RenameServerDialogProps) {
+  const { t } = useTranslation()
   const [name, setName] = useState(currentName)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const validateServerName = (name: string): string => {
     if (!name) {
-      return 'Server name is required'
+      return t('serverDetails.serverNameValidation.required')
     }
 
     if (name.length > 63) {
-      return 'Server name must be less than 64 characters'
+      return t('serverDetails.serverNameValidation.maxLength')
     }
 
     if (!/^[a-z0-9][a-z0-9.-]*[a-z0-9]$/i.test(name)) {
-      return 'Server name may only contain letters, numbers, periods, and dashes, and must start and end with a letter or number'
+      return t('serverDetails.serverNameValidation.format')
     }
 
     if (/[.-]{2,}/.test(name)) {
-      return 'Server name must not contain consecutive periods or dashes'
+      return t('serverDetails.serverNameValidation.consecutive')
     }
 
     return ''
@@ -64,7 +66,7 @@ export function RenameServerDialog({
       onClose()
     } catch (error) {
       console.error('Failed to rename server:', error)
-      setError('Failed to rename server')
+      setError(t('notifications.operationFailed'))
     } finally {
       setLoading(false)
     }
@@ -72,17 +74,17 @@ export function RenameServerDialog({
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Rename Server</DialogTitle>
+      <DialogTitle>{t('serverDetails.renameServer')}</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
           margin="dense"
-          label="Server Name"
+          label={t('servers.serverName')}
           fullWidth
           value={name}
           onChange={handleNameChange}
           error={Boolean(error)}
-          helperText={error || 'Use letters, numbers, periods, and dashes'}
+          helperText={error || t('serverDetails.serverNameHelp')}
           disabled={loading}
           inputProps={{
             pattern: '[a-zA-Z0-9.-]*',
@@ -92,14 +94,14 @@ export function RenameServerDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} disabled={loading}>
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={loading || Boolean(error) || name === currentName}
           variant="contained"
         >
-          Rename
+          {t('common.save')}
         </Button>
       </DialogActions>
     </Dialog>

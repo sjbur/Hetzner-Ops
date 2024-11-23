@@ -20,6 +20,7 @@ import { hetznerService } from '@/services/hetznerService'
 import type { Server } from '@/types/hetzner'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNotifications } from '@/hooks/useNotifications'
+import { useTranslation } from 'react-i18next'
 
 interface ServerActionsProps {
   server: Server
@@ -30,6 +31,7 @@ export function ServerActions({
   server,
   onActionComplete,
 }: ServerActionsProps) {
+  const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -77,7 +79,7 @@ export function ServerActions({
             }
             disabled={server.status === 'running'}
           >
-            <PlayArrow sx={{ mr: 1 }} /> Start
+            <PlayArrow sx={{ mr: 1 }} /> {t('servers.start')}
           </MenuItem>
 
           <MenuItem
@@ -86,7 +88,7 @@ export function ServerActions({
             }
             disabled={server.status === 'stopped'}
           >
-            <Stop sx={{ mr: 1 }} /> Stop
+            <Stop sx={{ mr: 1 }} /> {t('servers.stop')}
           </MenuItem>
 
           <MenuItem
@@ -97,22 +99,24 @@ export function ServerActions({
               )
             }
           >
-            <Refresh sx={{ mr: 1 }} /> Reboot
+            <Refresh sx={{ mr: 1 }} /> {t('servers.reboot')}
           </MenuItem>
 
           <MenuItem onClick={() => setConfirmDelete(true)}>
-            <Delete sx={{ mr: 1 }} /> Delete
+            <Delete sx={{ mr: 1 }} /> {t('servers.delete')}
           </MenuItem>
         </Menu>
       </AnimatePresence>
 
       <Dialog open={confirmDelete} onClose={() => setConfirmDelete(false)}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>{t('common.confirm')}</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete server {server.name}?
+          {t('servers.confirmDelete', { name: server.name })}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
+          <Button onClick={() => setConfirmDelete(false)}>
+            {t('common.cancel')}
+          </Button>
           <Button
             onClick={() =>
               handleAction(
@@ -122,7 +126,7 @@ export function ServerActions({
             }
             color="error"
           >
-            Delete
+            {t('common.delete')}
           </Button>
         </DialogActions>
       </Dialog>

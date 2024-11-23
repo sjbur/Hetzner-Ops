@@ -9,10 +9,6 @@ import {
   DialogContent,
   DialogActions,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +26,7 @@ import { hetznerService } from '@/services/hetznerService'
 import type { Snapshot } from '@/types/hetzner'
 import { SnapshotsSkeleton } from '@/components/SnapshotsSkeleton/SnapshotsSkeleton'
 import { useNotifications } from '@/hooks/useNotifications'
+import { useTranslation } from 'react-i18next'
 
 interface ServerSnapshotsProps {
   serverId: number
@@ -39,6 +36,7 @@ interface ServerSnapshotsProps {
 type SortValue = 'created:desc' | 'created:asc' | 'name:asc' | 'name:desc'
 
 export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
+  const { t } = useTranslation()
   const [snapshots, setSnapshots] = useState<Snapshot[]>([])
   const [loading, setLoading] = useState(true)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -48,7 +46,7 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
   )
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [sort, setSort] = useState<SortValue>('created:desc')
+  const [sort] = useState<SortValue>('created:desc')
   const { showSuccess, showError, showWarning } = useNotifications()
 
   const fetchSnapshots = useCallback(async () => {
@@ -126,40 +124,22 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
             mb: 2,
           }}
         >
-          <Typography variant="h6">Snapshots</Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <FormControl size="small" sx={{ minWidth: 200 }}>
-              <InputLabel>Sort by</InputLabel>
-              <Select
-                value={sort}
-                label="Sort by"
-                onChange={(e) => setSort(e.target.value as SortValue)}
-              >
-                <MenuItem value="created:desc">Newest first</MenuItem>
-                <MenuItem value="created:asc">Oldest first</MenuItem>
-                <MenuItem value="name:asc">Name (A-Z)</MenuItem>
-                <MenuItem value="name:desc">Name (Z-A)</MenuItem>
-              </Select>
-            </FormControl>
-            <Button
-              variant="contained"
-              onClick={() => setCreateDialogOpen(true)}
-            >
-              Create Snapshot
-            </Button>
-          </Box>
+          <Typography variant="h6">{t('snapshots.title')}</Typography>
+          <Button variant="contained" onClick={() => setCreateDialogOpen(true)}>
+            {t('snapshots.createSnapshot')}
+          </Button>
         </Box>
 
         <TableContainer component={Paper} variant="outlined">
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell>Size</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>{t('common.name')}</TableCell>
+                <TableCell>{t('common.description')}</TableCell>
+                <TableCell>{t('common.created')}</TableCell>
+                <TableCell>{t('common.size')}</TableCell>
+                <TableCell>{t('common.status')}</TableCell>
+                <TableCell align="right">{t('common.actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -168,7 +148,7 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
               ) : snapshots.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} align="center">
-                    No snapshots available
+                    {t('snapshots.noSnapshots')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -182,11 +162,11 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
                     <TableCell>
                       {snapshot.image_size
                         ? `${snapshot.image_size.toFixed(2)} GB`
-                        : 'N/A'}
+                        : t('common.notAvailable')}
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={snapshot.status}
+                        label={t(`common.${snapshot.status}`)}
                         color={
                           snapshot.status === 'available'
                             ? 'success'
@@ -212,6 +192,62 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
           </Table>
         </TableContainer>
 
+        {/* Create Dialog */}
+        <Dialog
+          open={createDialogOpen}
+          onClose={() => setCreateDialogOpen(false)}
+        >
+          <DialogTitle>{t('snapshots.createSnapshot')}</DialogTitle>
+          <DialogContent>
+            <Typography color="warning.main" gutterBottom>
+              {t('snapshots.warningMessage')}
+            </Typography>
+            <TextField
+              autoFocus
+              margin="dense"
+              label={t('common.description')}
+              fullWidth
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              helperText={t('snapshots.descriptionHelp')}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setCreateDialogOpen(false)}>
+              {t('common.cancel')}
+            </Button>
+            <Button
+              onClick={handleCreateSnapshot}
+              variant="contained"
+              color="warning"
+            >
+              {t('snapshots.createSnapshot')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Delete Dialog */}
+        <Dialog
+          open={deleteConfirmOpen !== null}
+          onClose={() => setDeleteConfirmOpen(null)}
+        >
+          <DialogTitle>{t('common.confirm')}</DialogTitle>
+          <DialogContent>{t('snapshots.confirmDelete')}</DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteConfirmOpen(null)}>
+              {t('common.cancel')}
+            </Button>
+            <Button
+              onClick={() =>
+                deleteConfirmOpen && handleDeleteSnapshot(deleteConfirmOpen)
+              }
+              color="error"
+            >
+              {t('common.delete')}
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <TablePagination
           component="div"
           count={-1}
@@ -223,64 +259,11 @@ export function ServerSnapshots({ serverId }: ServerSnapshotsProps) {
             setPage(0)
           }}
           rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage={t('common.rowsPerPage')}
+          labelDisplayedRows={({ from, to }) =>
+            t('common.displayedRows', { from, to })
+          }
         />
-
-        {/* Create Snapshot Dialog */}
-        <Dialog
-          open={createDialogOpen}
-          onClose={() => setCreateDialogOpen(false)}
-        >
-          <DialogTitle>Create Snapshot</DialogTitle>
-          <DialogContent>
-            <Box sx={{ mb: 2 }}>
-              <Typography color="warning.main" variant="body2" gutterBottom>
-                Warning: To ensure data consistency, it is recommended to shut
-                down the server before creating a snapshot.
-              </Typography>
-            </Box>
-            <TextField
-              autoFocus
-              margin="dense"
-              label="Description"
-              fullWidth
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              helperText="Optional description for the snapshot"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
-            <Button
-              onClick={handleCreateSnapshot}
-              variant="contained"
-              color="warning"
-            >
-              Create Snapshot
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        {/* Delete Confirmation Dialog */}
-        <Dialog
-          open={deleteConfirmOpen !== null}
-          onClose={() => setDeleteConfirmOpen(null)}
-        >
-          <DialogTitle>Confirm Delete</DialogTitle>
-          <DialogContent>
-            Are you sure you want to delete this snapshot?
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDeleteConfirmOpen(null)}>Cancel</Button>
-            <Button
-              onClick={() =>
-                deleteConfirmOpen && handleDeleteSnapshot(deleteConfirmOpen)
-              }
-              color="error"
-            >
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
       </CardContent>
     </Card>
   )

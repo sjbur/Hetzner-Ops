@@ -12,6 +12,7 @@ import { useState, useEffect } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { ServerMetrics as ServerMetricsType } from '@/types/hetzner'
 import { MetricsSkeleton } from '@/components/MetricsSkeleton/MetricsSkeleton'
+import { useTranslation } from 'react-i18next'
 
 interface ServerMetricsProps {
   serverId: number
@@ -54,6 +55,7 @@ function formatTimestamp(timestamp: number): string {
 }
 
 export function ServerMetrics({ serverId }: ServerMetricsProps) {
+  const { t } = useTranslation()
   const [metrics, setMetrics] = useState<ServerMetricsType | null>(null)
   const [loading, setLoading] = useState(true)
   const [tabValue, setTabValue] = useState(0)
@@ -85,7 +87,7 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
 
   const firstMetric = Object.values(time_series)[0]
   if (!firstMetric) {
-    return <Box>No metrics data available</Box>
+    return <Box>{t('metrics.noData')}</Box>
   }
 
   const chartData = firstMetric.values.map(([timestamp]) => {
@@ -117,16 +119,16 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
     <Card>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Server Metrics
+          {t('metrics.title')}
         </Typography>
 
         <Tabs
           value={tabValue}
           onChange={(_, newValue) => setTabValue(newValue)}
         >
-          <Tab label="CPU" />
-          <Tab label="Disk" />
-          <Tab label="Network" />
+          <Tab label={t('metrics.cpu')} />
+          <Tab label={t('metrics.disk')} />
+          <Tab label={t('metrics.network')} />
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
@@ -141,7 +143,7 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
                   type="monotone"
                   dataKey="cpu"
                   stroke="#8884d8"
-                  name="CPU Usage (%)"
+                  name={t('metrics.cpuUsage')}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -151,7 +153,7 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
         <TabPanel value={tabValue} index={1}>
           <Box sx={{ height: 300 }}>
             <Typography variant="subtitle2" gutterBottom>
-              Disk IOPS
+              {t('metrics.diskIops')}
             </Typography>
             <ResponsiveContainer>
               <LineChart data={chartData}>
@@ -163,13 +165,13 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
                   type="monotone"
                   dataKey="diskRead"
                   stroke="#82ca9d"
-                  name="Read (IOPS)"
+                  name={t('metrics.diskRead')}
                 />
                 <Line
                   type="monotone"
                   dataKey="diskWrite"
                   stroke="#ffc658"
-                  name="Write (IOPS)"
+                  name={t('metrics.diskWrite')}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -179,7 +181,7 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
         <TabPanel value={tabValue} index={2}>
           <Box sx={{ height: 300 }}>
             <Typography variant="subtitle2" gutterBottom>
-              Network Bandwidth
+              {t('metrics.networkBandwidth')}
             </Typography>
             <ResponsiveContainer>
               <LineChart data={chartData}>
@@ -191,13 +193,13 @@ export function ServerMetrics({ serverId }: ServerMetricsProps) {
                   type="monotone"
                   dataKey="networkIn"
                   stroke="#82ca9d"
-                  name="In"
+                  name={t('metrics.networkIn')}
                 />
                 <Line
                   type="monotone"
                   dataKey="networkOut"
                   stroke="#ffc658"
-                  name="Out"
+                  name={t('metrics.networkOut')}
                 />
               </LineChart>
             </ResponsiveContainer>

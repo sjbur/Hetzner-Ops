@@ -21,21 +21,28 @@ import {
   Menu as MenuIcon,
 } from '@mui/icons-material'
 import { useState } from 'react'
-
-const menuItems = [
-  { path: '/', label: 'Home', icon: <HomeIcon /> },
-  { path: '/security', label: 'Security', icon: <SecurityIcon /> },
-  { path: '/about', label: 'About', icon: <InfoIcon /> },
-]
+import { LanguageToggle } from '@/components/LanguageToggle/LanguageToggle'
+import { useTranslation } from 'react-i18next'
 
 export function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const { t } = useTranslation()
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen)
   }
+
+  const menuItems = [
+    { path: '/', label: t('navigation.home'), icon: <HomeIcon /> },
+    {
+      path: '/security',
+      label: t('navigation.security'),
+      icon: <SecurityIcon />,
+    },
+    { path: '/about', label: t('navigation.about'), icon: <InfoIcon /> },
+  ]
 
   const drawer = (
     <List>
@@ -85,7 +92,10 @@ export function Navigation() {
             ))}
           </Box>
         )}
-        <ThemeToggle />
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <LanguageToggle />
+          <ThemeToggle />
+        </Box>
       </Toolbar>
 
       <Drawer

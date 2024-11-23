@@ -11,11 +11,13 @@ import { Link } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import { MotionCard } from '@/components/animations/MotionCard'
 import { FiltersSkeleton } from '@/components/FiltersSkeleton/FiltersSkeleton'
+import { useTranslation } from 'react-i18next'
 
 export function HomePage() {
   const { servers, isLoading, error, refresh } = useServers()
   const { filters } = useStore()
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
+  const { t } = useTranslation()
 
   // Apply filters and sorting
   const filteredServers = servers
@@ -52,9 +54,9 @@ export function HomePage() {
     return (
       <Box sx={{ p: 3 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-          <Typography variant="h4">Hetzner Servers</Typography>
+          <Typography variant="h4">{t('servers.title')}</Typography>
           <Button variant="contained" startIcon={<AddIcon />} disabled>
-            Create Server
+            {t('servers.createServer')}
           </Button>
         </Box>
 
@@ -70,13 +72,13 @@ export function HomePage() {
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
-        <Typography variant="h4">Hetzner Servers</Typography>
+        <Typography variant="h4">{t('servers.title')}</Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setCreateDialogOpen(true)}
         >
-          Create Server
+          {t('servers.createServer')}
         </Button>
       </Box>
 
@@ -117,7 +119,7 @@ export function HomePage() {
 
                       <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                         <Chip
-                          label={server.status}
+                          label={t(`filters.${server.status}`)}
                           color={
                             server.status === 'running' ? 'success' : 'default'
                           }
@@ -135,7 +137,7 @@ export function HomePage() {
                         color="text.secondary"
                         gutterBottom
                       >
-                        IP: {server.public_net.ipv4.ip}
+                        {t('common.ipAddress')}: {server.public_net.ipv4.ip}
                       </Typography>
 
                       <Typography
@@ -143,14 +145,14 @@ export function HomePage() {
                         color="text.secondary"
                         gutterBottom
                       >
-                        Type: {server.server_type.name}
+                        {t('common.serverType')}: {server.server_type.name}
                       </Typography>
 
                       <Typography variant="body2" color="text.secondary">
-                        Resources: {server.server_type.cores} CPU,{' '}
-                        {server.server_type.memory}GB RAM,{' '}
-                        {server.server_type.disk}
-                        GB Disk
+                        {t('common.resources')}: {server.server_type.cores}{' '}
+                        {t('common.cores')}, {server.server_type.memory}GB{' '}
+                        {t('common.memory')}, {server.server_type.disk}GB{' '}
+                        {t('common.disk')}
                       </Typography>
                     </CardContent>
                   </MotionCard>

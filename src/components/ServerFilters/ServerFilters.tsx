@@ -11,75 +11,98 @@ import {
   useTheme,
   useMediaQuery,
   Typography,
+  Paper,
 } from '@mui/material'
 import {
   FilterList as FilterIcon,
   Close as CloseIcon,
+  Search as SearchIcon,
 } from '@mui/icons-material'
 import { useStore } from '@/store/useStore'
 import { useState } from 'react'
 import type { ServerFilters as ServerFiltersType } from '@/store/useStore'
+import { useTranslation } from 'react-i18next'
 
 export function ServerFilters() {
   const { filters, setFilters, resetFilters } = useStore()
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const { t } = useTranslation()
 
   const filterContent = (
     <>
-      <TextField
-        size="small"
-        label="Search"
-        value={filters.search || ''}
-        onChange={(e) => setFilters({ search: e.target.value })}
-        sx={{ minWidth: 200 }}
-      />
+      <Paper
+        elevation={0}
+        variant="outlined"
+        sx={{
+          p: '4px',
+          minWidth: { xs: '100%', sm: 300 },
+          flex: 2,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+          height: 40,
+        }}
+      >
+        <SearchIcon color="action" sx={{ ml: 1 }} />
+        <TextField
+          placeholder={t('filters.search')}
+          value={filters.search || ''}
+          onChange={(e) => setFilters({ search: e.target.value })}
+          fullWidth
+          variant="standard"
+          InputProps={{
+            disableUnderline: true,
+            sx: { height: '100%' },
+          }}
+        />
+      </Paper>
 
-      <FormControl size="small" sx={{ minWidth: 120 }}>
-        <InputLabel>Status</InputLabel>
+      <FormControl size="small" sx={{ minWidth: 180, flex: 1 }}>
+        <InputLabel>{t('filters.status')}</InputLabel>
         <Select
           value={filters.status || ''}
-          label="Status"
+          label={t('filters.status')}
           onChange={(e) => setFilters({ status: e.target.value })}
         >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="running">Running</MenuItem>
-          <MenuItem value="stopped">Stopped</MenuItem>
-          <MenuItem value="starting">Starting</MenuItem>
-          <MenuItem value="stopping">Stopping</MenuItem>
+          <MenuItem value="">{t('filters.all')}</MenuItem>
+          <MenuItem value="running">{t('filters.running')}</MenuItem>
+          <MenuItem value="stopped">{t('filters.stopped')}</MenuItem>
+          <MenuItem value="starting">{t('filters.starting')}</MenuItem>
+          <MenuItem value="stopping">{t('filters.stopping')}</MenuItem>
         </Select>
       </FormControl>
 
-      <FormControl size="small" sx={{ minWidth: 120 }}>
-        <InputLabel>Sort By</InputLabel>
+      <FormControl size="small" sx={{ minWidth: 180, flex: 1 }}>
+        <InputLabel>{t('filters.sortBy')}</InputLabel>
         <Select
           value={filters.sortBy || ''}
-          label="Sort By"
+          label={t('filters.sortBy')}
           onChange={(e) =>
             setFilters({
               sortBy: e.target.value as ServerFiltersType['sortBy'],
             })
           }
         >
-          <MenuItem value="">None</MenuItem>
-          <MenuItem value="name">Name</MenuItem>
-          <MenuItem value="status">Status</MenuItem>
-          <MenuItem value="created">Created</MenuItem>
+          <MenuItem value="">{t('filters.all')}</MenuItem>
+          <MenuItem value="name">{t('common.name')}</MenuItem>
+          <MenuItem value="status">{t('common.status')}</MenuItem>
+          <MenuItem value="created">{t('common.created')}</MenuItem>
         </Select>
       </FormControl>
 
-      <FormControl size="small" sx={{ minWidth: 120 }}>
-        <InputLabel>Order</InputLabel>
+      <FormControl size="small" sx={{ minWidth: 180, flex: 1 }}>
+        <InputLabel>{t('filters.order')}</InputLabel>
         <Select
           value={filters.sortOrder}
-          label="Order"
+          label={t('filters.order')}
           onChange={(e) =>
             setFilters({ sortOrder: e.target.value as 'asc' | 'desc' })
           }
         >
-          <MenuItem value="asc">Ascending</MenuItem>
-          <MenuItem value="desc">Descending</MenuItem>
+          <MenuItem value="asc">{t('filters.ascending')}</MenuItem>
+          <MenuItem value="desc">{t('filters.descending')}</MenuItem>
         </Select>
       </FormControl>
 
@@ -89,7 +112,7 @@ export function ServerFilters() {
           onClick={() => setMobileFiltersOpen(false)}
           sx={{ mt: 2 }}
         >
-          Apply Filters
+          {t('filters.applyFilters')}
         </Button>
       )}
     </>
@@ -111,7 +134,7 @@ export function ServerFilters() {
           </IconButton>
           {(filters.search || filters.status || filters.sortBy) && (
             <Button size="small" onClick={resetFilters}>
-              Clear Filters
+              {t('filters.clearFilters')}
             </Button>
           )}
         </Box>
@@ -133,7 +156,7 @@ export function ServerFilters() {
                 mb: 2,
               }}
             >
-              <Typography variant="h6">Filters</Typography>
+              <Typography variant="h6">{t('filters.filters')}</Typography>
               <IconButton
                 onClick={() => setMobileFiltersOpen(false)}
                 size="small"
@@ -163,13 +186,18 @@ export function ServerFilters() {
         gap: 2,
         mb: 3,
         flexWrap: 'wrap',
-        alignItems: 'center',
+        alignItems: 'flex-start',
       }}
     >
       {filterContent}
       {(filters.search || filters.status || filters.sortBy) && (
-        <Button size="small" onClick={resetFilters}>
-          Clear Filters
+        <Button
+          size="small"
+          onClick={resetFilters}
+          variant="outlined"
+          sx={{ height: 40 }}
+        >
+          {t('filters.clearFilters')}
         </Button>
       )}
     </Box>

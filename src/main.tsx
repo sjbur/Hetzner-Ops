@@ -10,20 +10,23 @@ import { RouterProvider } from '@tanstack/react-router'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider } from '@theme/ThemeContext'
 import { router } from '@/router'
+import { LanguageProvider } from '@/i18n/LanguageContext'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
-      <CssBaseline />
-      <SnackbarProvider
-        maxSnack={3}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-      >
-        <RouterProvider router={router} />
-      </SnackbarProvider>
-    </ThemeProvider>
+    <LanguageProvider>
+      <ThemeProvider>
+        <CssBaseline />
+        <SnackbarProvider
+          maxSnack={3}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+        >
+          <RouterProvider router={router} />
+        </SnackbarProvider>
+      </ThemeProvider>
+    </LanguageProvider>
   </StrictMode>,
 )

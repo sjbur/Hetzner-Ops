@@ -24,13 +24,15 @@ import {
   Delete as DeleteIcon,
   ContentCopy as CopyIcon,
 } from '@mui/icons-material'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { SSHKey } from '@/types/hetzner'
 import { useNotifications } from '@/hooks/useNotifications'
 import { SSHKeysSkeleton } from '@/components/SSHKeysSkeleton/SSHKeysSkeleton'
+import { useTranslation } from 'react-i18next'
 
 export function SSHKeys() {
+  const { t } = useTranslation()
   const [keys, setKeys] = useState<SSHKey[]>([])
   const [loading, setLoading] = useState(true)
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -46,7 +48,7 @@ export function SSHKeys() {
   const [formError, setFormError] = useState('')
   const { showSuccess, showError } = useNotifications()
 
-  const fetchKeys = async () => {
+  const fetchKeys = useCallback(async () => {
     try {
       const response = await hetznerService.getSSHKeys({
         page: page + 1,
@@ -59,46 +61,47 @@ export function SSHKeys() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [page, rowsPerPage])
 
   useEffect(() => {
     fetchKeys()
-  }, [fetchKeys, page, rowsPerPage])
+  }, [fetchKeys])
 
   const handleCreate = async () => {
     if (!formData.name || !formData.public_key) {
-      setFormError('Name and public key are required')
+      setFormError(t('sshKeys.nameRequired'))
       return
     }
 
     try {
       await hetznerService.createSSHKey(formData)
-      showSuccess('SSH key added successfully')
+      showSuccess(t('sshKeys.keyAdded'))
       await fetchKeys()
       setCreateDialogOpen(false)
       setFormData({ name: '', public_key: '' })
       setFormError('')
     } catch (error) {
       console.error('Failed to create SSH key:', error)
-      showError('Failed to add SSH key')
-      setFormError('Failed to create SSH key')
+      showError(t('sshKeys.addingFailed'))
+      setFormError(t('sshKeys.addingFailed'))
     }
   }
 
   const handleDelete = async (id: number) => {
     try {
       await hetznerService.deleteSSHKey(id)
-      showSuccess('SSH key deleted successfully')
+      showSuccess(t('sshKeys.keyDeleted'))
       await fetchKeys()
       setDeleteConfirmOpen(null)
     } catch (error) {
       console.error('Failed to delete SSH key:', error)
-      showError('Failed to delete SSH key')
+      showError(t('sshKeys.deletingFailed'))
     }
   }
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
+    showSuccess(t('notifications.copySuccess'))
   }
 
   return (
@@ -112,9 +115,9 @@ export function SSHKeys() {
             mb: 2,
           }}
         >
-          <Typography variant="h6">SSH Keys</Typography>
+          <Typography variant="h6">{t('sshKeys.title')}</Typography>
           <Button variant="contained" onClick={() => setCreateDialogOpen(true)}>
-            Add SSH Key
+            {t('sshKeys.addKey')}
           </Button>
         </Box>
 
@@ -122,10 +125,10 @@ export function SSHKeys() {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Fingerprint</TableCell>
-                <TableCell>Created</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell>{t('common.name')}</TableCell>
+                <TableCell>{t('sshKeys.fingerprint')}</TableCell>
+                <TableCell>{t('common.created')}</TableCell>
+                <TableCell align="right">{t('common.actions')}</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -134,7 +137,7 @@ export function SSHKeys() {
               ) : keys.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} align="center">
-                    No SSH keys found
+                    {t('sshKeys.noKeys')}
                   </TableCell>
                 </TableRow>
               ) : (
@@ -186,6 +189,10 @@ export function SSHKeys() {
             setPage(0)
           }}
           rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage={t('common.rowsPerPage')}
+          labelDisplayedRows={({ from, to }) =>
+            t('common.displayedRows', { from, to })
+          }
         />
 
         {/* Create Dialog */}
@@ -195,24 +202,24 @@ export function SSHKeys() {
           maxWidth="sm"
           fullWidth
         >
-          <DialogTitle>Add SSH Key</DialogTitle>
+          <DialogTitle>{t('sshKeys.addKey')}</DialogTitle>
           <DialogContent>
             <Box
               sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}
             >
               <TextField
-                label="Name"
+                label={t('common.name')}
                 value={formData.name}
                 onChange={(e) =>
                   setFormData({ ...formData, name: e.target.value })
                 }
                 error={Boolean(formError)}
-                helperText={formError}
+                helperText={formError || t('sshKeys.nameHelp')}
                 fullWidth
                 required
               />
               <TextField
-                label="Public Key"
+                label={t('sshKeys.publicKey')}
                 value={formData.public_key}
                 onChange={(e) =>
                   setFormData({ ...formData, public_key: e.target.value })
@@ -221,36 +228,38 @@ export function SSHKeys() {
                 rows={4}
                 fullWidth
                 required
-                placeholder="Paste your SSH public key here..."
+                placeholder={t('sshKeys.publicKeyPlaceholder')}
               />
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setCreateDialogOpen(false)}>Cancel</Button>
+            <Button onClick={() => setCreateDialogOpen(false)}>
+              {t('common.cancel')}
+            </Button>
             <Button onClick={handleCreate} variant="contained">
-              Add Key
+              {t('common.create')}
             </Button>
           </DialogActions>
         </Dialog>
 
-        {/* Delete Confirmation Dialog */}
+        {/* Delete Dialog */}
         <Dialog
           open={deleteConfirmOpen !== null}
           onClose={() => setDeleteConfirmOpen(null)}
         >
-          <DialogTitle>Confirm Delete</DialogTitle>
-          <DialogContent>
-            Are you sure you want to delete this SSH key?
-          </DialogContent>
+          <DialogTitle>{t('common.confirm')}</DialogTitle>
+          <DialogContent>{t('sshKeys.confirmDelete')}</DialogContent>
           <DialogActions>
-            <Button onClick={() => setDeleteConfirmOpen(null)}>Cancel</Button>
+            <Button onClick={() => setDeleteConfirmOpen(null)}>
+              {t('common.cancel')}
+            </Button>
             <Button
               onClick={() =>
                 deleteConfirmOpen && handleDelete(deleteConfirmOpen)
               }
               color="error"
             >
-              Delete
+              {t('common.delete')}
             </Button>
           </DialogActions>
         </Dialog>
