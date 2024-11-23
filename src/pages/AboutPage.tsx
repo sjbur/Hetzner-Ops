@@ -5,6 +5,11 @@ import { useTranslation } from 'react-i18next'
 export function AboutPage() {
   const { t } = useTranslation()
 
+  const features = t('about.features.list', { returnObjects: true }) as string[]
+  const technologies = t('about.technologies.list', {
+    returnObjects: true,
+  }) as string[]
+
   return (
     <Box sx={{ p: 3 }}>
       <motion.div
@@ -28,26 +33,22 @@ export function AboutPage() {
             {t('about.features.title')}
           </Typography>
           <ul>
-            {t('about.features.list', { returnObjects: true }).map(
-              (feature: string, index: number) => (
-                <Typography key={index} component="li" sx={{ mb: 1 }}>
-                  {feature}
-                </Typography>
-              ),
-            )}
+            {features.map((feature: string, index: number) => (
+              <Typography key={index} component="li" sx={{ mb: 1 }}>
+                {feature}
+              </Typography>
+            ))}
           </ul>
 
           <Typography variant="h6" gutterBottom sx={{ mt: 4 }}>
             {t('about.technologies.title')}
           </Typography>
           <ul>
-            {t('about.technologies.list', { returnObjects: true }).map(
-              (tech: string, index: number) => (
-                <Typography key={index} component="li" sx={{ mb: 1 }}>
-                  {tech}
-                </Typography>
-              ),
-            )}
+            {technologies.map((tech: string, index: number) => (
+              <Typography key={index} component="li" sx={{ mb: 1 }}>
+                {tech}
+              </Typography>
+            ))}
           </ul>
         </Paper>
       </motion.div>
