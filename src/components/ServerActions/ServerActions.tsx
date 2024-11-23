@@ -115,7 +115,10 @@ export function ServerActions({
           <Button onClick={() => setConfirmDelete(false)}>Cancel</Button>
           <Button
             onClick={() =>
-              handleAction(() => hetznerService.deleteServer(server.id))
+              handleAction(
+                () => hetznerService.deleteServer(server.id),
+                'delete',
+              )
             }
             color="error"
           >
