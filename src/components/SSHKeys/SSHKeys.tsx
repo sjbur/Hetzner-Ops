@@ -28,6 +28,7 @@ import { useState, useEffect } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { SSHKey } from '@/types/hetzner'
 import { useNotifications } from '@/hooks/useNotifications'
+import { SSHKeysSkeleton } from '@/components/SSHKeysSkeleton/SSHKeysSkeleton'
 
 export function SSHKeys() {
   const [keys, setKeys] = useState<SSHKey[]>([])
@@ -129,11 +130,7 @@ export function SSHKeys() {
             </TableHead>
             <TableBody>
               {loading ? (
-                <TableRow>
-                  <TableCell colSpan={4} align="center">
-                    Loading...
-                  </TableCell>
-                </TableRow>
+                <SSHKeysSkeleton />
               ) : keys.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} align="center">
