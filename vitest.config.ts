@@ -24,6 +24,8 @@ export default defineConfig({
         '**/*.stories.{js,jsx,ts,tsx}',
         '**/*.story.{js,jsx,ts,tsx}',
         'src/routeTree.gen.ts',
+        'src/main.tsx',
+        'src/router.ts',
       ],
       include: ['src/**/*.{js,jsx,ts,tsx}'],
       all: true,

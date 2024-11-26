@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
+import './mocks/i18next'
 
 // Мок для window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -8,10 +9,15 @@ Object.defineProperty(window, 'matchMedia', {
     matches: false,
     media: query,
     onchange: null,
-    addListener: vi.fn(), // устаревший
-    removeListener: vi.fn(), // устаревший
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
     addEventListener: vi.fn(),
     removeEventListener: vi.fn(),
     dispatchEvent: vi.fn(),
   })),
+})
+
+// Очищаем все моки после каждого теста
+afterEach(() => {
+  vi.clearAllMocks()
 })
