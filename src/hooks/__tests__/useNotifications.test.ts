@@ -3,7 +3,7 @@ import { useNotifications } from '../useNotifications'
 import { useSnackbar } from 'notistack'
 import { vi } from 'vitest'
 
-// Мокаем notistack
+// Mock notistack
 vi.mock('notistack', () => ({
   useSnackbar: vi.fn(),
 }))

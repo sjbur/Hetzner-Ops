@@ -1,42 +1,42 @@
-# Hetzner Admin Panel
+# Hetzner Cloud Admin Panel
 
-Веб-интерфейс для управления облачной инфраструктурой Hetzner Cloud. Позволяет управлять серверами, снапшотами и SSH-ключами через удобный интерфейс.
+Web interface for managing Hetzner Cloud infrastructure. Allows you to manage servers, snapshots, and SSH keys through a user-friendly interface.
 
-## 🚀 Возможности
+## 🚀 Features
 
-- Управление серверами (создание, запуск, остановка, перезагрузка, удаление)
-- Мониторинг метрик серверов в реальном времени (CPU, диск, сеть)
-- Управление снапшотами для резервного копирования
-- Управление SSH-ключами для безопасного доступа
-- Поддержка светлой и тёмной темы
-- Многоязычный интерфейс (английский/русский)
-- Адаптивный дизайн для мобильных устройств
+- Server management (creation, start, stop, reboot, deletion)
+- Real-time server metrics monitoring (CPU, disk, network)
+- Snapshot management for backups
+- SSH key management for secure access
+- Light and dark theme support
+- Multilingual interface (English/Russian)
+- Adaptive design for mobile devices
 
-## 🛠 Технологии
+## 🛠 Technologies
 
-- **React 18** с TypeScript
-- **Material UI** для современного интерфейса
-- **TanStack Router** для типобезопасной маршрутизации
-- **i18next** для интернационализации
-- **Zustand** для управления состоянием
-- **SWR** для кеширования и синхронизации данных
-- **Recharts** для визуализации метрик
-- **Notistack** для уведомлений
-- **Framer Motion** для анимаций
+- **React 18** with TypeScript
+- **Material UI** for components
+- **TanStack Router** for routing
+- **SWR** for data fetching
+- **Zustand** for state management
+- **i18next** for localization
+- **Framer Motion** for animations
+- **Vitest** for testing
+- **Storybook** for component documentation
 
-## 📦 Установка и запуск
+## 📦 Installation and Setup
 
 ```bash
-# Установка зависимостей
+# Install dependencies
 pnpm install
 
-# Настройка переменных окружения
+# Setup environment variables
 cp .env.example .env
-# Добавьте свой API токен Hetzner в .env
+# Add your Hetzner API token to .env
 
-# Запуск для разработки
+# Run development server
 pnpm dev
 
-# Сборка
+# Build for production
 pnpm build
 ```

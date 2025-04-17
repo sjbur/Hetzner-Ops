@@ -2,7 +2,7 @@ import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 import './mocks/i18next'
 
-// Мок для window.matchMedia
+// Mock for window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
@@ -17,7 +17,7 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 })
 
-// Очищаем все моки после каждого теста
+// Clear all mocks after each test
 afterEach(() => {
   vi.clearAllMocks()
 })

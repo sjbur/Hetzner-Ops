@@ -21,7 +21,7 @@ describe('MotionContainer', () => {
 
     const container = screen.getByTestId('test-container')
     expect(container).toBeInTheDocument()
-    // MUI Box применяет стили через CSS-in-JS
+    // MUI Box applies styles via CSS-in-JS
     expect(container.className).toMatch(/MuiBox-root/)
   })
 
@@ -34,7 +34,7 @@ describe('MotionContainer', () => {
 
     const container = screen.getByTestId('test-container')
     const motionDiv = container.firstChild
-    // Проверяем, что внутри есть motion.div с анимационными атрибутами
+    // Check that there is a motion.div with animation attributes inside
     expect(motionDiv).toHaveAttribute('data-framer-motion-initial')
   })
 })

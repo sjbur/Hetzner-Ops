@@ -33,10 +33,10 @@ export type { ${name}Props } from './${name}'
 function generateComponent(name: string) {
   const componentDir = path.join(process.cwd(), 'src/components', name)
 
-  // Создаем директорию компонента
+  // Create component directory
   fs.mkdirSync(componentDir, { recursive: true })
 
-  // Создаем файлы компонента
+  // Create component files
   fs.writeFileSync(
     path.join(componentDir, `${name}.tsx`),
     componentTemplate(name),
@@ -48,7 +48,7 @@ function generateComponent(name: string) {
   fs.writeFileSync(path.join(componentDir, 'index.ts'), indexTemplate(name))
 }
 
-// Получаем имя компонента из аргументов командной строки
+// Get component name from command line arguments
 const componentName = process.argv[2]
 if (!componentName) {
   console.error('Please provide a component name')

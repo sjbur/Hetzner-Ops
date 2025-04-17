@@ -10,7 +10,7 @@ import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import type { CSSProperties } from 'react'
 
-// Инициализация i18next для тестов
+// Initialize i18next for tests
 i18n.use(initReactI18next).init({
   lng: 'en',
   fallbackLng: 'en',
@@ -36,7 +36,7 @@ interface MotionDivProps {
   [key: string]: unknown
 }
 
-// Мок для Framer Motion
+// Mock for Framer Motion
 vi.mock('framer-motion', () => ({
   motion: {
     div: ({ children, whileHover, whileTap, ...props }: MotionDivProps) =>
@@ -74,7 +74,7 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => render(ui, { wrapper: AllTheProviders, ...options })
 
-// Экспортируем только типы и утилиты для тестирования
+// Export only types and testing utilities
 export type { RenderOptions }
 export { customRender as render }
 export { userEvent } from '@testing-library/user-event'

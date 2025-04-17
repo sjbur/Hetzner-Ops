@@ -2,7 +2,7 @@ import { render, screen } from '@/test/test-utils'
 import { SecurityPage } from '../SecurityPage'
 import { mockTranslations } from '@/test/mocks/i18next'
 
-// Мок для SSHKeys компонента
+// Mock for SSHKeys component
 vi.mock('@/components/SSHKeys/SSHKeys', () => ({
   SSHKeys: () => <div data-testid="ssh-keys">SSH Keys Component</div>,
 }))

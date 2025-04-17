@@ -8,7 +8,7 @@ vi.mock('@/hooks/useApi', () => ({
   useApi: () => mockUseApi(),
 }))
 
-// Мок для react-router
+// Mock for react-router
 vi.mock('@tanstack/react-router', () => ({
   useParams: () => ({ serverId: '1' }),
   useNavigate: () => vi.fn(),
@@ -110,7 +110,7 @@ describe('ServerDetailsPage', () => {
 
     render(<ServerDetailsPage />)
 
-    // Используем регулярное выражение для поиска текста, который может быть разбит
+    // Use regular expression to find text that might be split
     expect(
       screen.getByText((content) => {
         return content.includes('Error') && content.includes('Test error')

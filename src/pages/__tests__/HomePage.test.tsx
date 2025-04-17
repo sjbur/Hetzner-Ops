@@ -19,7 +19,7 @@ vi.mock('@/store/useStore', () => ({
   }),
 }))
 
-// Мок для TanStack Router
+// Mock for TanStack Router
 vi.mock('@tanstack/react-router', () => ({
   Link: ({
     children,
@@ -30,7 +30,7 @@ vi.mock('@tanstack/react-router', () => ({
     to: string
     params?: Record<string, string>
   }) => {
-    // Заменяем параметры в URL если они есть
+    // Replace URL parameters if they exist
     const href = params
       ? Object.entries(params).reduce(
           (url, [key, value]) => url.replace(`$${key}`, value),
@@ -123,7 +123,7 @@ describe('HomePage', () => {
 
     const serverLinks = screen.getAllByTestId('router-link')
     expect(serverLinks.length).toBeGreaterThan(0)
-    // Проверяем, что ссылка содержит правильный ID сервера
+    // Check that the link contains the correct server ID
     expect(serverLinks[0]).toHaveAttribute('href', '/servers/1')
   })
 

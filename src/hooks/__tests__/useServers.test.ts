@@ -3,7 +3,7 @@ import { useServers } from '../useServers'
 import { useApi } from '../useApi'
 import { vi } from 'vitest'
 
-// Мокаем useApi хук
+// Mock useApi hook
 vi.mock('../useApi', () => ({
   useApi: vi.fn(),
 }))

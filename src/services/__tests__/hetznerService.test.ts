@@ -2,7 +2,7 @@ import { hetznerService } from '../hetznerService'
 import { client } from '@/api/client'
 import { vi } from 'vitest'
 
-// Мокаем axios клиент
+// Mock axios client
 vi.mock('@/api/client', () => ({
   client: {
     get: vi.fn(),

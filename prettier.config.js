@@ -1,29 +1,29 @@
 /** @type {import("prettier").Config} */
 export default {
-  // Максимальная длина строки
+  // Maximum line length
   printWidth: 80,
   
-  // Использовать одинарные кавычки
+  // Use single quotes
   singleQuote: true,
   
-  // Добавлять точку с запятой в конце выражений
+  // Add semicolons at the end of statements
   semi: false,
   
-  // Отступ с помощью 2 пробелов
+  // Indent using 2 spaces
   tabWidth: 2,
   
-  // Добавлять запятые в многострочных конструкциях
+  // Add commas in multiline constructs
   trailingComma: 'all',
   
-  // Отступы в объектах
+  // Object indentation
   bracketSpacing: true,
   
-  // Скобки в стрелочных функциях
+  // Parentheses in arrow functions
   arrowParens: 'always',
   
-  // Перенос строк в HTML-подобном синтаксисе
+  // Line breaks in HTML-like syntax
   bracketSameLine: false,
   
-  // Сохранять существующие переносы строк
+  // Preserve existing line breaks
   proseWrap: 'preserve',
 } 

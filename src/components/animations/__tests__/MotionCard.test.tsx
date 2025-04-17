@@ -21,7 +21,7 @@ describe('MotionCard', () => {
 
     const card = screen.getByTestId('test-card')
     expect(card).toBeInTheDocument()
-    // MUI применяет стили через CSS-in-JS, поэтому проверяем наличие класса
+    // MUI applies styles via CSS-in-JS, so we check for class presence
     expect(card.className).toMatch(/MuiCard-root/)
   })
 
@@ -33,7 +33,7 @@ describe('MotionCard', () => {
     )
 
     const card = screen.getByTestId('test-card')
-    // Framer Motion добавляет data-атрибуты для анимаций
+    // Framer Motion adds data attributes for animations
     expect(card).toHaveAttribute('data-framer-motion-initial')
   })
 })

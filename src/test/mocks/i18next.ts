@@ -13,13 +13,13 @@ const mockI18n = {
   changeLanguage: vi.fn(),
 }
 
-// Мок для i18next
+// Mock for i18next
 vi.mock('i18next', () => ({
   default: mockI18n,
   createInstance: () => mockI18n,
 }))
 
-// Мок для react-i18next
+// Mock for react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: mockI18n.t,

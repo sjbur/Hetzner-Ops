@@ -10,7 +10,7 @@ const initialFilters: ServerFilters = {
 
 describe('useStore', () => {
   beforeEach(() => {
-    // Очищаем состояние перед каждым тестом
+    // Clear state before each test
     const { result } = renderHook(() => useStore())
     act(() => {
       result.current.resetFilters()
@@ -45,7 +45,7 @@ describe('useStore', () => {
   it('should reset filters', () => {
     const { result } = renderHook(() => useStore())
 
-    // Сначала устанавливаем какие-то фильтры
+    // First, set some filters
     act(() => {
       result.current.setFilters({
         status: 'running',
@@ -53,7 +53,7 @@ describe('useStore', () => {
       })
     })
 
-    // Затем сбрасываем
+    // Then reset
     act(() => {
       result.current.resetFilters()
     })
@@ -64,7 +64,7 @@ describe('useStore', () => {
   it('should partially update filters', () => {
     const { result } = renderHook(() => useStore())
 
-    // Устанавливаем начальные фильтры
+    // Set initial filters
     act(() => {
       result.current.setFilters({
         status: 'running',
@@ -74,7 +74,7 @@ describe('useStore', () => {
       })
     })
 
-    // Обновляем только часть фильтров
+    // Update only part of the filters
     act(() => {
       result.current.setFilters({
         search: 'new search',
@@ -82,7 +82,7 @@ describe('useStore', () => {
       })
     })
 
-    // Проверяем, что обновились только указанные поля
+    // Check that only specified fields were updated
     expect(result.current.filters).toEqual({
       status: 'running',
       search: 'new search',
@@ -94,7 +94,7 @@ describe('useStore', () => {
   it('should persist filters between renders', () => {
     const { result, rerender } = renderHook(() => useStore())
 
-    // Устанавливаем фильтры
+    // Set filters
     act(() => {
       result.current.setFilters({
         status: 'running',
@@ -102,10 +102,10 @@ describe('useStore', () => {
       })
     })
 
-    // Перерендериваем хук
+    // Re-render hook
     rerender()
 
-    // Проверяем, что фильтры сохранились
+    // Check that filters were preserved
     expect(result.current.filters).toEqual({
       ...initialFilters,
       status: 'running',

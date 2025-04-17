@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import { LanguageProvider, useLanguage } from '../LanguageContext'
 import { vi } from 'vitest'
 
-// Компонент для тестирования хука useLanguage
+// Component for testing useLanguage hook
 const TestComponent = () => {
   const { language, setLanguage } = useLanguage()
   return (
@@ -20,9 +20,9 @@ const TestComponent = () => {
 
 describe('LanguageContext', () => {
   beforeEach(() => {
-    // Очищаем localStorage перед каждым тестом
+    // Clear localStorage before each test
     localStorage.clear()
-    // Сбрасываем моки
+    // Reset mocks
     vi.clearAllMocks()
   })
 
@@ -55,14 +55,14 @@ describe('LanguageContext', () => {
       </LanguageProvider>,
     )
 
-    // Изначально английский
+    // Initially English
     expect(screen.getByTestId('current-lang')).toHaveTextContent('en')
 
-    // Меняем на русский
+    // Change to Russian
     fireEvent.click(screen.getByTestId('change-to-ru'))
     expect(screen.getByTestId('current-lang')).toHaveTextContent('ru')
 
-    // Меняем обратно на английский
+    // Change back to English
     fireEvent.click(screen.getByTestId('change-to-en'))
     expect(screen.getByTestId('current-lang')).toHaveTextContent('en')
   })
@@ -96,7 +96,7 @@ describe('LanguageContext', () => {
   })
 
   it('should use browser language if available and no saved language', () => {
-    // Мокаем navigator.language
+    // Mock navigator.language
     const originalNavigator = window.navigator
     const mockNavigator = {
       ...originalNavigator,
@@ -115,7 +115,7 @@ describe('LanguageContext', () => {
 
     expect(screen.getByTestId('current-lang')).toHaveTextContent('ru')
 
-    // Восстанавливаем оригинальный navigator
+    // Restore original navigator
     Object.defineProperty(window, 'navigator', {
       value: originalNavigator,
       writable: true,

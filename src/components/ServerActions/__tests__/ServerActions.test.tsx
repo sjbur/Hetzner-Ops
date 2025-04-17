@@ -5,7 +5,7 @@ import { useNotifications } from '@/hooks/useNotifications'
 import { vi } from 'vitest'
 import { Server } from '@/types/hetzner'
 
-// Мокаем сервисы и хуки
+// Mock services and hooks
 vi.mock('@/services/hetznerService')
 vi.mock('@/hooks/useNotifications')
 
@@ -58,7 +58,7 @@ describe('ServerActions', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    // Мокаем useNotifications
+    // Mock useNotifications
     vi.mocked(useNotifications).mockReturnValue({
       showSuccess: mockShowSuccess,
       showError: mockShowError,
@@ -101,7 +101,7 @@ describe('ServerActions', () => {
       />,
     )
 
-    // Открываем меню и кликаем "Start"
+    // Open menu and click "Start"
     fireEvent.click(screen.getByRole('button'))
     fireEvent.click(screen.getByText('servers.start'))
 
@@ -166,11 +166,11 @@ describe('ServerActions', () => {
       />,
     )
 
-    // Открываем меню и кликаем "Delete"
+    // Open menu and click "Delete"
     fireEvent.click(screen.getByRole('button'))
     fireEvent.click(screen.getByText('servers.delete'))
 
-    // Проверяем, что диалог подтверждения открылся
+    // Check that confirmation dialog is opened
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     expect(screen.getByText('common.confirm')).toBeInTheDocument()
   })
@@ -185,7 +185,7 @@ describe('ServerActions', () => {
       />,
     )
 
-    // Открываем меню и запускаем удаление
+    // Open menu and delete
     fireEvent.click(screen.getByRole('button'))
     fireEvent.click(screen.getByText('servers.delete'))
     fireEvent.click(screen.getByText('common.delete'))
