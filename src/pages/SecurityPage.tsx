@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material'
-import { SSHKeys } from '@/components/SSHKeys/SSHKeys'
+import { SSHKeys } from '@/components/molecules/SSHKeys/SSHKeys'
 import { motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ServerActions } from '@/components/ServerActions/ServerActions'
+import { ServerActions } from '@/components/molecules/ServerActions/ServerActions'
+import { Server } from '@/types/hetzner'
 
 const mockServer = {
   id: 1,
@@ -56,7 +57,7 @@ type Story = StoryObj<typeof meta>
 
 export const Running: Story = {
   args: {
-    server: mockServer,
+    server: mockServer as Server,
     onActionComplete: () => console.log('Action completed'),
   },
 }

@@ -1,10 +1,10 @@
 import type { Meta } from '@storybook/react'
-import { FiltersSkeleton } from '@/components/FiltersSkeleton/FiltersSkeleton'
-import { ServerSkeleton } from '@/components/ServerSkeleton/ServerSkeleton'
-import { ServerDetailsSkeleton } from '@/components/ServerDetailsSkeleton/ServerDetailsSkeleton'
-import { MetricsSkeleton } from '@/components/MetricsSkeleton/MetricsSkeleton'
-import { SnapshotsSkeleton } from '@/components/SnapshotsSkeleton/SnapshotsSkeleton'
-import { SSHKeysSkeleton } from '@/components/SSHKeysSkeleton/SSHKeysSkeleton'
+import { FiltersSkeleton } from '@/components/atoms/Skeleton/FiltersSkeleton/FiltersSkeleton'
+import { ServerSkeleton } from '@/components/atoms/Skeleton/ServerSkeleton/ServerSkeleton'
+import { ServerDetailsSkeleton } from '@/components/atoms/Skeleton/ServerDetailsSkeleton/ServerDetailsSkeleton'
+import { MetricsSkeleton } from '@/components/atoms/Skeleton/MetricsSkeleton/MetricsSkeleton'
+import { SnapshotsSkeleton } from '@/components/atoms/Skeleton/SnapshotsSkeleton/SnapshotsSkeleton'
+import { SSHKeysSkeleton } from '@/components/atoms/Skeleton/SSHKeysSkeleton/SSHKeysSkeleton'
 
 const meta = {
   title: 'Components/Skeletons',

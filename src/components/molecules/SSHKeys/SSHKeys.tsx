@@ -28,7 +28,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { SSHKey } from '@/types/hetzner'
 import { useNotifications } from '@/hooks/useNotifications'
-import { SSHKeysSkeleton } from '@/components/SSHKeysSkeleton/SSHKeysSkeleton'
+import { SSHKeysSkeleton } from '@/components/atoms/Skeleton/SSHKeysSkeleton/SSHKeysSkeleton'
 import { useTranslation } from 'react-i18next'
 
 export function SSHKeys() {

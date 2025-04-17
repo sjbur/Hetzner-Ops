@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ServerFilters } from '@/components/ServerFilters/ServerFilters'
+import { ServerFilters } from '@/components/molecules/ServerFilters/ServerFilters'
 
 const meta = {
   title: 'Components/ServerFilters',

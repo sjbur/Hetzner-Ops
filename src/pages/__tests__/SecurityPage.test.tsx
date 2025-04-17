@@ -12,7 +12,7 @@ describe('SecurityPage', () => {
     render(<SecurityPage />)
 
     expect(
-      screen.getByText(mockTranslations['navigation.security']),
+      screen.getByText(mockTranslations['navigation.security'] as string),
     ).toBeInTheDocument()
   })
 
@@ -26,7 +26,7 @@ describe('SecurityPage', () => {
     render(<SecurityPage />)
 
     const animationWrapper = screen
-      .getByText(mockTranslations['navigation.security'])
+      .getByText(mockTranslations['navigation.security'] as string)
       .closest('[data-framer-motion-initial]')
     expect(animationWrapper).toBeInTheDocument()
   })

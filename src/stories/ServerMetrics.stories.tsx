@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ServerMetrics } from '@/components/ServerMetrics/ServerMetrics'
+import { ServerMetrics } from '@/components/molecules/ServerMetrics/ServerMetrics'
 
 const meta = {
   title: 'Components/ServerMetrics',

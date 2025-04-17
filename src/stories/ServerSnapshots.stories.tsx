@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { ServerSnapshots } from '@/components/ServerSnapshots/ServerSnapshots'
+import { ServerSnapshots } from '@/components/organisms/ServerSnapshots/ServerSnapshots'
 
 const meta = {
   title: 'Components/ServerSnapshots',

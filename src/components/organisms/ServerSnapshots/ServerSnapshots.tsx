@@ -24,7 +24,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material'
 import { useState, useEffect, useCallback } from 'react'
 import { hetznerService } from '@/services/hetznerService'
 import type { Snapshot } from '@/types/hetzner'
-import { SnapshotsSkeleton } from '@/components/SnapshotsSkeleton/SnapshotsSkeleton'
+import { SnapshotsSkeleton } from '@/components/atoms/Skeleton/SnapshotsSkeleton/SnapshotsSkeleton'
 import { useNotifications } from '@/hooks/useNotifications'
 import { useTranslation } from 'react-i18next'
 

@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   AppBar,
   Toolbar,
@@ -13,7 +14,8 @@ import {
   useMediaQuery,
 } from '@mui/material'
 import { Link } from '@tanstack/react-router'
-import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle'
+import { ThemeToggle } from '@/components/atoms/ThemeToggle/ThemeToggle'
+import { LanguageToggle } from '@/components/atoms/LanguageToggle/LanguageToggle'
 import {
   Home as HomeIcon,
   Security as SecurityIcon,
@@ -21,10 +23,9 @@ import {
   Menu as MenuIcon,
 } from '@mui/icons-material'
 import { useState } from 'react'
-import { LanguageToggle } from '@/components/LanguageToggle/LanguageToggle'
 import { useTranslation } from 'react-i18next'
 
-export function Navigation() {
+export const Navigation: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -52,7 +53,6 @@ export function Navigation() {
           component={Link}
           to={item.path}
           onClick={handleDrawerToggle}
-          sx={{ color: 'inherit', textDecoration: 'none' }}
         >
           <ListItemIcon>{item.icon}</ListItemIcon>
           <ListItemText primary={item.label} />
@@ -64,51 +64,41 @@ export function Navigation() {
   return (
     <AppBar position="static">
       <Toolbar>
-        {isMobile ? (
-          <>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Box sx={{ flexGrow: 1 }} />
-          </>
-        ) : (
-          <Box sx={{ flexGrow: 1, display: 'flex', gap: 2 }}>
-            {menuItems.map((item) => (
-              <Button
-                key={item.path}
-                color="inherit"
-                component={Link}
-                to={item.path}
-                startIcon={item.icon}
-              >
-                {item.label}
-              </Button>
-            ))}
-          </Box>
+        {isMobile && (
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+          >
+            <MenuIcon />
+          </IconButton>
         )}
+        <Box sx={{ flexGrow: 1, display: { xs: 'none', sm: 'flex' } }}>
+          {menuItems.map((item) => (
+            <Button
+              key={item.path}
+              component={Link}
+              to={item.path}
+              color="inherit"
+              startIcon={item.icon}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
-          <LanguageToggle />
           <ThemeToggle />
+          <LanguageToggle />
         </Box>
       </Toolbar>
-
       <Drawer
         variant="temporary"
         anchor="left"
         open={mobileOpen}
         onClose={handleDrawerToggle}
         ModalProps={{
-          keepMounted: true, // Better open performance on mobile
-        }}
-        sx={{
-          display: { xs: 'block', sm: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+          keepMounted: true, // Better open performance on mobile.
         }}
       >
         {drawer}

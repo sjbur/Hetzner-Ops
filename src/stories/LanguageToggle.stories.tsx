@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { LanguageToggle } from '@/components/LanguageToggle/LanguageToggle'
+import { LanguageToggle } from '@/components/atoms/LanguageToggle/LanguageToggle'
 import { LanguageProvider } from '@/i18n/LanguageContext'
 
 const meta = {

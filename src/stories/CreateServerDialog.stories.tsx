@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CreateServerDialog } from '@/components/CreateServerDialog/CreateServerDialog'
+import { CreateServerDialog } from '@/components/molecules/CreateServerDialog/CreateServerDialog'
 import { withDialog } from '../../.storybook/decorators/withDialog'
 import { Button } from '@mui/material'
 import { useState } from 'react'
@@ -20,11 +20,20 @@ const DialogWithButton = () => {
       <Button variant="contained" onClick={() => setOpen(true)}>
         Open Create Server Dialog
       </Button>
-      <CreateServerDialog open={open} onClose={() => setOpen(false)} />
+      <CreateServerDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        onSuccess={() => console.log('Success')}
+      />
     </div>
   )
 }
 
 export const Default: Story = {
+  args: {
+    open: true,
+    onClose: () => {},
+    onSuccess: () => {},
+  },
   render: () => <DialogWithButton />,
 }

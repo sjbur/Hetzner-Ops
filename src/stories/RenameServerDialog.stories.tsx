@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { RenameServerDialog } from '@/components/RenameServerDialog/RenameServerDialog'
+import { RenameServerDialog } from '@/components/molecules/RenameServerDialog/RenameServerDialog'
 import { withDialog } from '../../.storybook/decorators/withDialog'
 import { Button } from '@mui/material'
 import { useState } from 'react'
@@ -23,12 +23,21 @@ const DialogWithButton = () => {
       <RenameServerDialog
         open={open}
         onClose={() => setOpen(false)}
-        serverName="Test Server"
+        currentName="Test Server"
+        serverId={1}
+        onSuccess={() => console.log('Success')}
       />
     </div>
   )
 }
 
 export const Default: Story = {
+  args: {
+    open: true,
+    onClose: () => {},
+    currentName: 'Test Server',
+    serverId: 1,
+    onSuccess: () => {},
+  },
   render: () => <DialogWithButton />,
 }

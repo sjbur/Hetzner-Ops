@@ -7,19 +7,23 @@ describe('AboutPage', () => {
     render(<AboutPage />)
 
     expect(
-      screen.getByText(mockTranslations['about.title']),
+      screen.getByText(mockTranslations['about.title'] as string),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(mockTranslations['about.projectDescription.title']),
+      screen.getByText(
+        mockTranslations['about.projectDescription.title'] as string,
+      ),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(mockTranslations['about.projectDescription.content']),
+      screen.getByText(
+        mockTranslations['about.projectDescription.content'] as string,
+      ),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(mockTranslations['about.features.title']),
+      screen.getByText(mockTranslations['about.features.title'] as string),
     ).toBeInTheDocument()
     expect(
-      screen.getByText(mockTranslations['about.technologies.title']),
+      screen.getByText(mockTranslations['about.technologies.title'] as string),
     ).toBeInTheDocument()
   })
 
@@ -45,7 +49,7 @@ describe('AboutPage', () => {
     render(<AboutPage />)
 
     const animationWrapper = screen
-      .getByText(mockTranslations['about.title'])
+      .getByText(mockTranslations['about.title'] as string)
       .closest('[data-framer-motion-initial]')
     expect(animationWrapper).toBeInTheDocument()
   })

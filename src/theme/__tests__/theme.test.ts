@@ -111,14 +111,29 @@ describe('theme', () => {
       const darkButtonContained =
         darkTheme.components?.MuiButton?.styleOverrides?.contained
 
+      const mockOwnerState = {
+        variant: 'contained',
+        color: 'primary',
+        size: 'medium',
+        disabled: false,
+      } as const
+
       if (typeof lightButtonContained === 'function') {
-        const lightButtonStyles = lightButtonContained({})
-        expect(lightButtonStyles['&:hover']?.boxShadow).toContain('0 2px 4px')
+        const lightButtonStyles = lightButtonContained({
+          theme: lightTheme,
+          ownerState: mockOwnerState,
+        }) as CSSObject
+        const hoverStyles = lightButtonStyles['&:hover'] as CSSObject
+        expect(hoverStyles.boxShadow).toContain('0 2px 4px')
       }
 
       if (typeof darkButtonContained === 'function') {
-        const darkButtonStyles = darkButtonContained({})
-        expect(darkButtonStyles['&:hover']?.boxShadow).toContain('0 2px 4px')
+        const darkButtonStyles = darkButtonContained({
+          theme: darkTheme,
+          ownerState: mockOwnerState,
+        }) as CSSObject
+        const hoverStyles = darkButtonStyles['&:hover'] as CSSObject
+        expect(hoverStyles.boxShadow).toContain('0 2px 4px')
       }
     })
   })

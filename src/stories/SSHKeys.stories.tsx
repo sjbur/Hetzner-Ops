@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { SSHKeys } from '@/components/SSHKeys/SSHKeys'
+import { SSHKeys } from '@/components/molecules/SSHKeys/SSHKeys'
 
 const meta = {
   title: 'Components/SSHKeys',
