@@ -1,6 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { ThemeProvider, useTheme } from '../ThemeContext'
-import { vi } from 'vitest'
+import { vi, Mock } from 'vitest'
 
 // Мокаем createAppTheme
 vi.mock('../theme', () => ({
@@ -20,6 +20,24 @@ const localStorageMock = {
 }
 Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
+// Определяем тип для мока matchMedia
+const mockMatchMedia = vi.fn().mockImplementation((query: string) => ({
+  matches: false,
+  media: query,
+  onchange: null,
+  addListener: vi.fn(),
+  removeListener: vi.fn(),
+  addEventListener: vi.fn(),
+  removeEventListener: vi.fn(),
+  dispatchEvent: vi.fn(),
+})) as Mock
+
+// Переопределяем window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: mockMatchMedia,
+})
+
 // Тестовый компонент
 const TestComponent = () => {
   const { mode, toggleColorMode } = useTheme()
@@ -38,7 +56,7 @@ describe('ThemeContext', () => {
     vi.clearAllMocks()
 
     // Устанавливаем светлую тему по умолчанию
-    window.matchMedia.mockImplementation((query) => ({
+    mockMatchMedia.mockImplementation((query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -102,7 +120,7 @@ describe('ThemeContext', () => {
   })
 
   it('should use system preference when no localStorage value', async () => {
-    window.matchMedia.mockImplementation((query) => ({
+    ;(window.matchMedia as Mock).mockImplementation((query: string) => ({
       matches: true, // Эмулируем тёмную тему в системе
       media: query,
       onchange: null,
