@@ -97,6 +97,7 @@ export const ru = {
     ascending: 'По возрастанию',
     descending: 'По убыванию',
     all: 'Все',
+    initializing: 'Инициализация',
     running: 'Работает',
     stopped: 'Остановлен',
     starting: 'Запускается',

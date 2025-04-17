@@ -97,6 +97,7 @@ export const en = {
     ascending: 'Ascending',
     descending: 'Descending',
     all: 'All',
+    initializing: 'Initializing',
     running: 'Running',
     stopped: 'Stopped',
     starting: 'Starting',
